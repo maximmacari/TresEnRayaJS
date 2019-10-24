@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="js/usuario.js"></script>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <!-- Popper JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-sm bg-secondary navbar-dark justify-content-center">
+        <div id="logotipo">
+            <img src="../res/img/icono_logo.png" alt="Logotipo." width="50px" height="40px" />
+        </div>
+        <ul class="navbar-nav">
+            <li class="nav-item active">
+                <a class="nav-link" href="">Juego</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="descripcion_juego.html">Descripción del Juego</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="autores.html">Autores</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link " href="referencias">Referencias</a>
+            </li>
+        </ul>
+    </nav>
+    <div class="container-fluid">
+        <div class="row">
+            <div id="login" class="col-2">
+                <div id="usuario">
+                    <form>
+                        <div class="form-group">
+                            <label for="email">Usuario</label>
+                            <input type="text" class="form-control" id="email" placeholder="Enter email" name="email">
+                        </div>
+                        <div class="form-group">
+                            <label for="pwd">Password:</label>
+                            <input type="password" class="form-control" id="pwd" placeholder="Enter password"
+                                name="pswd">
+                        </div>
+                        <input type="button" value="Enviar" onclick="postUsuario()" class="btn btn-primary" />
+                    </form>
+                </div>
+            </div>
+            <div id="contenido" class="col-8" style="background-color:orange;">
+
+
+                <main>
+                    <canvas id="canvasMain">
+
+                    </canvas>
+                    <div id="usuariosList">
+                        <ul>
+
+                        </ul>
+                    </div>
+                </main>
+
+            </div>
+            <div id="rival" class="col-2" style="background-color:yellow;">En caso de online aquí aparecerá el jugador
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

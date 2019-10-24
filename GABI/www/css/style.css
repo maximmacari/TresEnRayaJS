@@ -1,0 +1,32 @@
+#canvasMain{
+  background-color: azure;
+  display: block;
+  margin: 0 auto;
+}
+
+#usuariosList{
+  position: fixed;
+  overflow-y: auto;
+  overflow-x: hidden;
+  top: 50px;
+  right: 0;
+  height: 300px;
+  width: 150px;
+  border-left: 2px solid #a4a4a4;
+  border-bottom: 2px solid #a4a4a4;
+  border-top: 2px solid #a4a4a4;
+  border-top-left-radius: 7px;
+  border-bottom-left-radius: 7px;
+}
+
+#usuariosList ul{
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+#usuariosList ul > li{
+  width: 100%;
+  border-bottom: 1px solid black;
+  padding: 4px;
+}
