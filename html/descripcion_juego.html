@@ -1,4 +1,5 @@
 <html>
+
 <head>
     <title>Descripción del juego</title>
     <link rel="stylesheet" type="text/css" href="../css/style_descripcion_juego.css">
@@ -42,76 +43,55 @@
     </nav>
     <div id="descripcion">
         <h3>En qué consiste el juego.</h3>
-        <p>El juego 'battleJShip' es un juego tradicional de estrategia y algo de suerte, que involucra a dos
-            participantes.</p>
-        <p>Basicamente, consiste en hundir la flota del contrincante. Para ello, debe colocar su propia
-            flota de forma estratégica y encontrar y hundir con los disparos la flota contraria. </p>
-        <p>Una vez todas las naves han sido posicionadas, se inicia una serie de rondas.</p>
+        <p>El tres en línea, también conocido como tres en raya o en inglés como Tic-Tac-Toe, es un juego de lápiz y
+            papel entre dos jugadores 'X' e 'O',
+            que marcan los espacios de un tablero de 3x3 alternadamente.</p>
         <div id="puntos_descripcion">
-            <h4>Tableros</h4>
-            <p>Los jugadores manejan un tablero de océano y un tablero de tiro;
-                cada uno divididos en casillas. </p>
-            <p>Cada tablero representa una zona diferente del mar abierto:
-                la propia y la contraria. En el primer tablero, el jugador coloca sus
-                barcos y registra los «tiros» del oponente; en el otro, se registran
-                los tiros propios contra el otro jugador,
-                diferenciando los impactos y los que dan al agua.</p>
-            <p> Al tiempo, se deduce la posición de los barcos del contrincante.</p>
-            <h4>Naves</h4>
-            <p>Al comenzar, cada jugador posiciona sus barcos en el primer tablero,
-                de forma secreta, invisible al oponente.</p>
-            <p>Cada quien ocupa, según sus preferencias, una misma cantidad de casillas,
-                horizontal y/o verticalmente, las que representan sus naves.
-                Ambos participantes deben ubicar igual número de naves, por lo que es habitual,
-                antes de comenzar, estipular de común acuerdo la cantidad y
-                el tamaño de las naves que se posicionarán en el tablero.</p>
+            <h4>Tablero</h4>
+            <p>Ambos jugadores, alternandose, tiene una oportunidad para posicionar su  'X' o 'O' en una tablero 1D de 3x3 espacios.</p>
+            <p>En caso de que el jugador haga trampa, el ganador será el otro.</p>
+            <p>Si el jugador marca una casilla, aunque sea la más mínima marca, deberá poner símbolo de la siguiente jugada en esa casilla.</p>
             <h4>Fin de juego</h4>
             <p>El juego puede terminar con un ganador o en empate:</p>
             <ul>
-                <li><b>Hay ganador</b>: quien destruya primero todas las naves de su oponente será el vencedor (como en
-                    tantos otros juegos en los que se participa por turnos, en caso de que el participante que comenzó
-                    la partida hunda en su última jugada el
-                    último barco de su oponente que quedaba a flote, el otro participante tiene derecho a una última
-                    posibilidad para alcanzar el empate, a un último disparo que también le permita terminar de hundir
-                    la flota contraria, lo que supondría un empate);</li>
+                <li><b>Hay ganador</b>: quien primero consiga tres 'X' o 'O' ,segun el jugador, será el ganador.</li>
             </ul>
             <ul>
-                <li><b>Empate</b>: si bien lo habitual es continuar el juego
-                    hasta que haya un ganador, el empate también puede alcanzarse si, tras haber disparado cada jugador
-                    una misma cantidad de tiros fija y predeterminada (como una variante permitida en el juego), ambos
-                    jugadores han acertado en igual número de casillas contrarias.</li>
+                <li><b>Empate</b>: En la mayoría de los casos, una vez entendido el juego, los jugadores no tardan en descubrir que el juego
+                    perfecto termina en empate sin importar con qué juega el primer jugador.</li>
             </ul>
         </div>
         <div id="instrucciones">
             <!--HECHO-->
-            <h3>Instrucciones.¿Cómo jugar?</h3>
-            <p>1. Cada jugador dispone de dos cuádriculas que ocultará al contrincante. En una debe
-                colocar sus barcos y en la otra debe anotar sus disparos.</p>
-            <p>2. Los barcos se tienen que colocar respetando una franja de cuadros en blanco alrededor.</p>
-            <p>3. Cada jugador dispone de un turno de disparo que se irá alternando.</p>
-            <p>4. Cada dispar puede resultar en 3 posibilidades</p>
-            <ol>
-                <li><b>Tocado:</b> El disparo efectuado da en el blanco.</li>
-                <li><b>Agua:</b> El disparo efectuado no da en el blanco.</li>
-                <li><b>Hundido:</b> El disparo efectuado provoca que un buque sea destruido por completo.</li>
-            </ol>
-            <p>5. Gana el jugador que antes consiga hundir la flota del otro.</p>
+            <h3>Instrucciones.¿Cómo jugar? o... cómo ganar/empatar siempre.</h3>
+            <p>1. Coloca la primera X en una esquina. Los jugadores más experimentados colocan la primera “X” en una esquina 
+                cada vez que empiezan primero. Esto le da al oponente mayor oportunidad para cometer un error. 
+                Si tu oponente responde colocando una 'O' en cualquier parte que no sea el centro, tienes una victoria garantizada.</p>
+            <p>2. Intenta ganar si tu oponente coloca la primera O en el centro. Si tu oponente juega su primera O en el centro, debes esperar a que cometa otro error antes de poder ganar.
+                 Si continúa jugando correctamente, el juego terminará en empate.</p>
+            <p>3. Gana automáticamente si tu oponente juega su primera O en cualquier casilla que no sea la del centro. Si tu oponente coloca su primera O en cualquier casilla que no sea la del centro, puedes ganar.
+                 Responde colocando tu segunda X en cualquier otra esquina, con un espacio vacío entre ambas X.</p>            
+            <p>4. Coloca la tercera X de modo que tengas dos posibles movimientos para ganar. La mayor parte del tiempo,
+                 tu oponente verá que tienes dos X en una fila y te bloqueará (si no lo hace, simplemente gana formando una fila de X).
+                    Después de que esto ocurra, debe haber una casilla vacía alineada con tus dos primeras X y sin ninguna O bloqueándola. Coloca la tercera X en esa casilla.</p>
         </div>
 
         <div id="terminos">
             <!--HECHO-->
             <h3>Términos y condiciones de uso.</h3>
-            <p>Este documento presenta los términos y condiciones de uso del juego 'battleJShip'
+            <p>Este documento presenta los términos y condiciones de uso del juego 'trenRaya'
                 creado por el Grupo 3 de 2º de DAM en <a href="https://www.iesvillaverde.es">IES Villaverde</a>
                 2019/2020 .
             </p>
-            <p>1. Se prohibe la copia, réplica completa o parcial de 'battleJShip' sin el permiso de sus creadores.</p>
-            <p>2. Podran jugar a 'battleJShip' todos los usuarios que sean mayores de edad.</p>
-			<p>3. No nos hacemos cargo y no nos responsabilizamos del uso inadecuado que puedan hacer los jugadores del juego y/o página.</p>
+            <p>1. Se prohibe la copia, réplica completa o parcial de 'trenRaya' sin el permiso de sus creadores.</p>
+            <p>2. Podran jugar a 'trenRaya' todos los usuarios que sean mayores de edad.</p>
+            <p>3. No nos hacemos cargo y tampoco nos responsabilizamos del uso inadecuado que puedan hacer los jugadores del
+                juego y/o página.</p>
         </div>
     </div>
     <footer>
         <p>©COPYRIGHT Todos los Derechos Reservados</p>
     </footer>
 </body>
+
 </html>
