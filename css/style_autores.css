@@ -6,3 +6,9 @@ div.espacio {
 #autor_card{
     background: RGB(194,197,204,0.25);
 }
+
+#autor_card:hover{
+    background: RGB(194,197,204,0.40);
+    border-bottom: 1px solid black;
+    border-inline-end-color: lightcoral;
+}
