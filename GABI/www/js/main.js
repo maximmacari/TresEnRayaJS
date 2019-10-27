@@ -71,10 +71,10 @@ class Juego{
 	//crear celdas
   generarCasillas(){
     let marginTop = 50;
-    let nCasillas = [4, 4];
+    let nCasillas = [2, 2];
     let margin = 2;
-    let paddingX = 20;
-    let paddingY = 20;
+    let paddingX = 10;
+    let paddingY = 10;
     let casillaSize = {
       w: (this.width / nCasillas[0]),
       h: ((this.height - marginTop) / nCasillas[1])
@@ -86,7 +86,7 @@ class Juego{
     console.log(casillaSize);
 
     for(let k=0; k<nCasillas[1]; k++){
-      let y = (k * (casillaSize.h + margin * 2)) + marginTop;
+      let y = (k * (casillaSize.h + margin)) + marginTop;
       y += paddingY;
 
       for(let i=0; i<nCasillas[0]; i++){
@@ -102,7 +102,7 @@ class Juego{
           color: "#000"
         };
 
-        casilla.color = "#0f0";
+        casilla.color = "rgb(200,200,200,0.4)";
 
         this.casillas.push(casilla);
       }
@@ -234,14 +234,17 @@ class Juego{
     console.log("Running...");
   //limpiar pantalla
     juego.ctx.clearRect(0, 0, juego.canvas.width, juego.canvas.height);
-    juego.ctx.fillStyle = "#ffffff";
+    juego.ctx.fillStyle = "#fff";
     juego.ctx.fillRect(0, 0, juego.canvas.width, juego.canvas.height);
 
+    juego.ctx.fillStyle = "#a4a4a4";
+    juego.ctx.fillRect(0, 0, juego.canvas.width, 50);
+
     for(let casilla of juego.casillas){
-		//casilla tiene color
-		juego.ctx.fillStyle = casilla.color;
-		//dibujar casilla largo, alto y ancho / 'x' e 'y' son posiciones
-		juego.ctx.fillRect(casilla.x, casilla.y, casilla.w, casilla.h);
+      //casilla tiene color
+      juego.ctx.fillStyle = casilla.color;
+      //dibujar casilla largo, alto y ancho / 'x' e 'y' son posiciones
+      juego.ctx.fillRect(casilla.x, casilla.y, casilla.w, casilla.h);
     }
 
     juego.ctx.restore();
