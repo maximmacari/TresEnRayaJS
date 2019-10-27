@@ -5,11 +5,16 @@ class SesionUsuario {
 
     cargarUsuario(){
         let usuarioSesion = {}
-        usuarioSesion.usuario = localStorage.getItem("user")
-        usuarioSesion.puntos = localStorage.getItem("puntos")
+        usuarioSesion.username = localStorage.getItem("username")
+        usuarioSesion.maxScore = localStorage.getItem("maxScore")
+
+        return JSON.stringify(usuarioSesion);
     }
-    pruebaOffline(){
-        localStorage.setItem("user","Jorge");
-        localStorage.setItem("puntos","123456");
+    guardarUsuario(usuarioSesion){
+        localStorage.setItem("username",usuarioSesion.username);
+        localStorage.setItem("maxScore",usuarioSesion.maxScore);
+    }
+    limpiarStorage(){
+        localStorage.clear()
     }
 }
