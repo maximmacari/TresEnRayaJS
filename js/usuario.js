@@ -1,10 +1,4 @@
 var tools = null
-/* function Usuario(user,pass,maxPuntos) {
-  this.userName     = user
-  this.pass         = pass
-  this.maxPuntos    = maxPuntos
-} */
-
 let Usuario = {
   username  : null,
   pass  : null,
@@ -75,19 +69,27 @@ function peticionGet(usuario){
   xhttp.send(usuario);
 }
 
-window.addEventListener("DOMContentLoaded", () =>{
-  tools = new Tool();
-  let linksMenu = menu.getElementsByClassName("nav-link");
-  for(let link of linksMenu){
-    link.addEventListener("click",() => {
-      let pagina = {
-        pagina : link.dataset.pagina
-      }
-      console.log(link.dataset.pagina)
-      let paginaJson = JSON.stringify(pagina); 
-      tools.httpPost("http://192.168.3.128:4740/getView",paginaJson,(msg)=>{
-        contenido.innerHTML = msg;
-      });
-    });
-  };
-});
+// window.addEventListener("DOMContentLoaded", () =>{
+//   tools = new Tool();
+//   let linksMenu = menu.getElementsByClassName("nav-link");
+//   for(let link of linksMenu){
+//     link.addEventListener("click",() => {
+//       let pagina = {
+//         pagina : link.dataset.pagina
+//       }
+//       console.log(link.dataset.pagina)
+//       let paginaJson = JSON.stringify(pagina); 
+//       tools.httpPost("http://192.168.3.128:4740/getView",paginaJson,(msg)=>{
+//         contenido.innerHTML = msg;
+//       });
+//     });
+//   };
+// });
+
+window.addEventListener("DOMContentLoaded",comprobacion);
+
+function comprobacion (){
+  let sesion = new SesionUsuario();
+  sesion.pruebaOffline();
+  getUsuario(sesion.cargarUsuario());
+}
