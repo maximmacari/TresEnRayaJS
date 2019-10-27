@@ -18,7 +18,7 @@ app.use((req, res, next) => {
   next();
 });
 
-function initUsersDb(){
+function initUsersDb() {
   let db = new sqlite3.Database('./db/usuarios.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
     if (err) {
       console.error(err.message);
@@ -33,8 +33,8 @@ function initUsersDb(){
     );
     `.trim();
 
-    db.exec(initQuery, function(err, stmt){
-      
+    db.exec(initQuery, function(err, stmt) {
+
     });
 
     db.close((err) => {
@@ -45,7 +45,7 @@ function initUsersDb(){
   });
 }
 
-function Jugador(nombre, maxScore, avatar, position){
+function Jugador(nombre, maxScore, avatar, position) {
   this.nombre = nombre;
   this.maxScore = maxScore;
   this.lastPing = new Date();
@@ -53,36 +53,36 @@ function Jugador(nombre, maxScore, avatar, position){
   this.position = position
 }
 
-function initWsServer(){
+function initWsServer() {
   wsServer = new WebSocket.Server({ port: 4741 });
 
-  wsServer.on('connection', function(ws, req){
+  wsServer.on('connection', function (ws, req) {
 
     ws.on('message', message => {
       let msg = JSON.parse(message);
-      
-      if(msg.type){
-        switch(msg.type){
-        case "userData":
-          let cliente = {
-            nombre: msg.data.nombre,
-            nivel: msg.data.nivel,
-            ip: req.connection.remoteAddress
-          };
 
-          clients.push(cliente);
+      if (msg.type) {
+        switch (msg.type) {
+          case "userData":
+            let cliente = {
+              nombre: msg.data.nombre,
+              nivel: msg.data.nivel,
+              ip: req.connection.remoteAddress
+            };
 
-          console.log("New user: " + cliente.nombre);
+            clients.push(cliente);
 
-          let dataSend = {
-            type: "clients",
-            data: clients
-          };
-        
-          ws.send(JSON.stringify(dataSend));
+            console.log("New user: " + cliente.nombre);
 
-          break;
-        case "ping":
+            let dataSend = {
+              type: "clients",
+              data: clients
+            };
+
+            ws.send(JSON.stringify(dataSend));
+
+            break;
+          case "ping":
 
         }
       }
@@ -90,15 +90,22 @@ function initWsServer(){
   });
 }
 
-app.get('/', function(req, res) {
+app.get('/', function (req, res) {
   res.sendFile('./views/index.html', { root: __dirname });
 });
 
-app.post('/login', function(req, res) {
+app.post('/getView', function (req, res) {
+  console.log(req.body);
+  ``````````````````````
+  res.sendFile(`./views/${req.body.pagina}`, { root: __dirname });
+});
+
+app.post('/login', function (req, res) {
   let dataSend = {
     username: "",
     loginState: false,
-    maxScore: 0
+    maxScore: 0,
+    hash: "prueba"
   };
 
   let db = new sqlite3.Database('./db/usuarios.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
@@ -113,34 +120,34 @@ app.post('/login', function(req, res) {
   `.trim();
 
   let username = req.body.username;
-  let passwd = req.body.pass;
+  let passwd = req.body.password;
 
-  db.get(queryLogin, [username, passwd], function(err, row){
-    if(err){
+  db.get(queryLogin, [username, passwd], function (err, row) {
+    if (err) {
       console.log(err);
     }
 
-    if(row){
+    if (row) {
       dataSend.loginState = true;
       dataSend.maxScore = row.maxScore;
       dataSend.username = row.username;
-    }else{
+    } else {
       dataSend.loginState = false;
     }
 
     console.log(dataSend);
 
     res.send(JSON.stringify(dataSend));
-  });
-  
-  db.close((err) => {
-    if (err) {
-      console.error(err.message);
-    }
+
+    db.close((err) => {
+      if (err) {
+        console.error(err.message);
+      }
+    });
   });
 });
 
-app.post('/signup', function(req, res) {
+app.post('/signup', function (req, res) {
   let dataSend = {
     signUpState: false,
     msg: ""
@@ -164,44 +171,44 @@ app.post('/signup', function(req, res) {
   let passwd = req.body.pass;
   let exists = false;
 
-  db.get(queryLogin, [username, passwd], function(err, row){
-    if(err){
+  db.get(queryLogin, [username, passwd], function (err, row) {
+    if (err) {
       console.log(err);
     }
 
-    if(row){
+    if (row) {
       exists = true;
-    }else{
+    } else {
       exists = false;
     }
 
-    if(!exists){
-      db.get(insertSignUp, [username, passwd], function(err, row){
-        if(err){
+    if (!exists) {
+      db.get(insertSignUp, [username, passwd], function (err, row) {
+        if (err) {
           console.log(err);
-        }else{
+        } else {
           console.log("OK SIGNUP");
-          
+
           dataSend.signUpState = true;
           dataSend.msg = "OK";
 
           res.send(JSON.stringify(dataSend));
         }
       });
-    }else{
+    } else {
       dataSend.signUpState = false;
       dataSend.msg = "EXISTS";
 
       res.send(JSON.stringify(dataSend));
     }
 
-    
+
   });
 });
 
 initUsersDb();
 initWsServer();
 
-app.listen(4740, function() {
+app.listen(4740, function () {
   console.log('Aplicación ejemplo, escuchando el puerto 4740!');
 });

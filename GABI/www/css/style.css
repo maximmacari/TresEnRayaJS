@@ -1,5 +1,5 @@
 #canvasMain{
-  background-color: azure;
+  background-color: transparent;
   display: block;
   margin: 0 auto;
 }
@@ -8,6 +8,7 @@
   position: fixed;
   overflow-y: auto;
   overflow-x: hidden;
+  z-index: 100;
   top: 50px;
   right: 0;
   height: 300px;
