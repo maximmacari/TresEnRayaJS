@@ -3,6 +3,17 @@ let Usuario = {
   username  : null,
   pass  : null,
 }
+var sesion = new SesionUsuario();
+
+//Comprobar si hay usuario en localstorage
+window.addEventListener("DOMContentLoaded",()=>{
+  if(localStorage.getItem("username")!=null){
+    getUsuario(sesion.cargarUsuario())
+  }else{
+
+  }
+});
+
 function postUsuario(){
   let jugador = Object.create(Usuario)
   jugador.username = email.value
@@ -39,6 +50,7 @@ function getUsuario(objetoJSON){
           </tr>
       </tbody>
     </table>
+    <button onclick="borrarSesion()" >Borrar</button>
   `
   usuario.innerHTML = tabla
 }
@@ -86,10 +98,10 @@ function peticionGet(usuario){
 //   };
 // });
 
-window.addEventListener("DOMContentLoaded",comprobacion);
+function login(){
+  let 
+}
 
-function comprobacion (){
-  let sesion = new SesionUsuario();
-  sesion.pruebaOffline();
-  getUsuario(sesion.cargarUsuario());
+function tablaUsuario(){
+  
 }
