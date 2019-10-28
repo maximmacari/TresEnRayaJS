@@ -5,7 +5,9 @@ const WebSocket = require('ws');
 const sqlite3 = require('sqlite3').verbose();
 
 var wsServer = null;
-var clients = [];
+
+var salas = [];
+var clientes = [];
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.json());
@@ -45,12 +47,28 @@ function initUsersDb() {
   });
 }
 
-function Jugador(nombre, maxScore, avatar, position) {
-  this.nombre = nombre;
-  this.maxScore = maxScore;
-  this.lastPing = new Date();
-  this.avatar = avatar;
-  this.position = position
+function generarTablero(sala){
+  let nCasillas = [3, 3];
+
+  this.casillas = [];
+
+  for(let i=0;i<nCasillas[1];i++){
+    let filaCasillas = [];
+
+    for(let k=0;k<nCasillas[0];k++){
+      let casilla = {
+        position: {
+          x: k,
+          y: i
+        },
+        value: "none"
+      };
+
+      filaCasillas.push(casilla);
+    }
+
+    sala.tablero.push(filaCasillas);
+  }
 }
 
 function initWsServer() {
@@ -65,25 +83,92 @@ function initWsServer() {
         switch (msg.type) {
           case "userData":
             let cliente = {
-              nombre: msg.data.nombre,
-              nivel: msg.data.nivel,
+              username: msg.data.username,
               ip: req.connection.remoteAddress
             };
 
-            clients.push(cliente);
+            clientes.push(cliente);
 
             console.log("New user: " + cliente.nombre);
 
             let dataSend = {
               type: "clients",
-              data: clients
+              data: clientes
             };
 
             ws.send(JSON.stringify(dataSend));
 
             break;
-          case "ping":
+          case "entrarSala":
+            let dataSend = {
+              type: "entrarSala",
+              result: false,
+              msg: ""
+            }
 
+            let salaEncontrada = false;
+          
+            for(let sala of salas){
+              if(sala.nombre === msg.data.nombreSala){
+                let libre = false;
+
+                salaEncontrada = true;
+                
+                if(sala.clave === msg.data.claveSala){
+                  for(let i=0;i<salas.jugadores.length;i++){
+                    if(salas.jugadores[i] !== null){
+                      libre = true;
+  
+                      salas.jugadores = msg.data.jugador;
+                    }
+                  }
+  
+                  if(libre){
+                    dataSend.result = false;
+                    dataSend.msg = "Sala llena"
+                  }else{
+                    dataSend.result = true;
+                    dataSend.msg = "Has entrado a la sala"
+                  }  
+                }else{
+                  dataSend.result = false;
+                  dataSend.msg = "Clave incorrecta";
+                }
+              }
+            }
+
+            if(!salaEncontrada){
+              dataSend.result = false;
+              dataSend.msg = "Sala no encontrada";
+            }
+
+            ws.send(JSON.stringify(dataSend));
+
+            break;
+          case "crearSala":
+            let dataSend = {
+              type: "crearSala",
+              result: false,
+              msg: ""
+            };
+
+            let sala = {
+              nombre: msg.data.nombreSala,
+              clave: msg.data.claveSala,
+              creador: msg.data.jugador,
+              jugadores: [null, null],
+              tablero: []
+            };
+
+            generarTablero(sala);
+
+            salas.push(sala);
+
+            console.log(sala);
+
+            ws.send(JSON.stringify(dataSend));
+
+            break;
         }
       }
     });
@@ -96,7 +181,7 @@ app.get('/', function (req, res) {
 
 app.post('/getView', function (req, res) {
   console.log(req.body);
-  ``````````````````````
+
   res.sendFile(`./views/${req.body.pagina}`, { root: __dirname });
 });
 

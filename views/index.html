@@ -19,6 +19,7 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
   <script src="js/tools.js"></script>
+  <script src="js/inicializador.js"></script>
   <script src="js/juego.js"></script>
   <script src="js/main.js"></script>
 </head>
@@ -43,7 +44,7 @@
   <main class="container-fluid">
     <div class="row">
       <div class="col-2 pt-2" id="espacioUsuario">
-        <!-- <form id="formLogin">
+        <form id="formLogin">
           <h4 class="text-center">Iniciar sesión</h4>
           <div class="form-group">
             <label for="username">Usuario</label>
@@ -54,12 +55,19 @@
             <input type="password" class="form-control" name="password" placeholder="Contraseña">
           </div>
           <input type="button" value="Enviar" onclick="main.logIn()" class="btn btn-primary btn-block" />
-        </form> -->
+        </form>
       </div>
       <div id="contenido" class="col-8 p-3" style="background-color:orange;">
-        <table id="tablero">
+        <div id="contSalas">
+          <table id="tableSalas">
+            
+          </table>
+        </div>
+        <div id="contJuego">
+          <table id="tablero">
           
-        </table>
+          </table>
+        </div>
       </div>
       <div id="usuariosList" class="col-2 p-0">
         <ul>
