@@ -46,7 +46,7 @@ class Main{
 class Juego{
   constructor(){
     this.width = 400;
-    this.height = 450;
+    this.height = 400;
     this.offsetX = 0;
     this.offsetY = 0;
 
@@ -54,10 +54,9 @@ class Juego{
     this.isRunning = true;
 
     this.usuariosList = document.getElementById("usuariosList");
-    this.canvas = document.getElementById("canvasMain");
-    this.canvas.width = this.width;
-    this.canvas.height = this.height;
-    this.ctx = null;
+    this.tablero = document.getElementById("tablero");
+    this.tablero.style.width = this.width + "px";
+    this.tablero.style.height = this.height + "px";
 
     this.casillas = [];
   }
@@ -70,48 +69,46 @@ class Juego{
 
 	//crear celdas
   generarCasillas(){
-    let marginTop = 50;
-    let nCasillas = [2, 2];
-    let margin = 2;
-    let paddingX = 10;
-    let paddingY = 10;
-    let casillaSize = {
-      w: (this.width / nCasillas[0]),
-      h: ((this.height - marginTop) / nCasillas[1])
-    };
+    let nCasillas = [3, 3];
 
-    casillaSize.w = (casillaSize.w - ((paddingX * 2) / nCasillas[0]));
-    casillaSize.h = (casillaSize.h - ((paddingY * 2) / nCasillas[1]));
-     
-    console.log(casillaSize);
+    this.tablero.innerHTML = "";
 
-    for(let k=0; k<nCasillas[1]; k++){
-      let y = (k * (casillaSize.h + margin)) + marginTop;
-      y += paddingY;
+    for(let i=0;i<nCasillas[1];i++){
+      let filaCasilla = document.createElement("tr");
 
-      for(let i=0; i<nCasillas[0]; i++){
-        let x = i * (casillaSize.w + margin);
-        
-        x += paddingX;
+      let circulo = (i%2) === 0;
 
-        let casilla = {
-          x: x,
-          y: y,
-          w: casillaSize.w - (margin * 2),
-          h: casillaSize.h - (margin * 2),
-          color: "#000"
-        };
+      for(let k=0;k<nCasillas[0];k++){
+        let htmlCasilla = `
+        <td>
+          <svg aria-label="X" role="img" viewBox="0 0 128 128" style="visibility: visible;display: none;">
+            <path class="casilla-cruz" d="M16,16L112,112" style="stroke: rgb(84, 84, 84); stroke-dasharray: 135.764; stroke-dashoffset: 0;"></path>
+            <path class="casilla-cruz" d="M112,16L16,112" style="stroke: rgb(84, 84, 84); stroke-dasharray: 135.764; stroke-dashoffset: 0;"></path>
+          </svg>
+          <svg aria-label="O" role="img" viewBox="0 0 128 128" style="visibility: visible;display: none;">
+            <path class="casilla-circulo" d="M64,16A48,48 0 1,0 64,112A48,48 0 1,0 64,16" style="stroke: rgb(242, 235, 211); stroke-dasharray: 301.635; stroke-dashoffset: 0;"></path>
+          </svg>
+        </td>
+        `;
+        let celdaCasilla = document.createElement("td");
+        celdaCasilla.innerHTML = htmlCasilla;
 
-        casilla.color = "rgb(200,200,200,0.4)";
+        if(circulo){
+          celdaCasilla.getElementsByTagName("svg")[0].style.display = "none";
+          celdaCasilla.getElementsByTagName("svg")[1].style.display = "block";
+        }else{
+          celdaCasilla.getElementsByTagName("svg")[0].style.display = "block";
+          celdaCasilla.getElementsByTagName("svg")[1].style.display = "none";
+        }
 
-        this.casillas.push(casilla);
+        filaCasilla.appendChild(celdaCasilla);
       }
+
+      this.tablero.appendChild(filaCasilla);
     }
   }
 
   init(){
-    this.ctx = this.canvas.getContext('2d');
-
     this.generarCasillas();
 
     window.WebSocket = window.WebSocket || window.MozWebSocket;
@@ -121,7 +118,7 @@ class Juego{
     this.ws.onopen = function () {
       console.log("OPEN");
       let userData = {
-        nombre: juego.user.username
+        nombre: main.jugador.username
       };
 
       let dataSend = {
@@ -167,51 +164,6 @@ class Juego{
       // handle incoming message
     };
 
-    this.canvas.addEventListener("keypress", function(ev){
-      ev.preventDefault();
-      ev.stopPropagation();
-
-      console.log(ev);
-      
-    });
-
-    this.canvas.addEventListener("mousedown", function(ev){
-      ev.preventDefault();
-      ev.stopPropagation();
-
-      juego.canvasCalcOffset();
-
-      let mouseX = parseInt(ev.clientX-juego.offsetX);
-      let mouseY = parseInt(ev.clientY-juego.offsetY);
-
-      for(let casilla of juego.casillas){
-        if(mouseX >= casilla.x && mouseY >= casilla.y 
-          && mouseX <= (casilla.x + casilla.w) 
-          && mouseY <= (casilla.y + casilla.h)){
-          
-        }
-      }
-    });
-
-    this.canvas.addEventListener("mousemove", function(ev){
-      ev.preventDefault();
-      ev.stopPropagation();
-
-      juego.canvasCalcOffset();
-
-      let mouseX = parseInt(ev.clientX-juego.offsetX);
-      let mouseY = parseInt(ev.clientY-juego.offsetY);
-
-      for(let casilla of juego.casillas){
-        if(mouseX >= casilla.x && mouseY >= casilla.y 
-          && mouseX <= (casilla.x + casilla.w) 
-          && mouseY <= (casilla.y + casilla.h)){
-		      //si el raton coincide con una casilla o está encima de ella
-		  
-        }
-      }
-    });
-
     setInterval(function(){
       let dataSend = {
         type: "getMap",
@@ -221,41 +173,10 @@ class Juego{
       juego.ws.send(JSON.stringify(dataSend));
       juego.update();
     }, 500);
-
-    // RENDERIZAR
-    requestAnimationFrame(this.render);
   }
 
   update(){
 
-  }
-
-  render(){
-    console.log("Running...");
-  //limpiar pantalla
-    juego.ctx.clearRect(0, 0, juego.canvas.width, juego.canvas.height);
-    juego.ctx.fillStyle = "#fff";
-    juego.ctx.fillRect(0, 0, juego.canvas.width, juego.canvas.height);
-
-    juego.ctx.fillStyle = "#a4a4a4";
-    juego.ctx.fillRect(0, 0, juego.canvas.width, 50);
-
-    for(let casilla of juego.casillas){
-      //casilla tiene color
-      juego.ctx.fillStyle = casilla.color;
-      //dibujar casilla largo, alto y ancho / 'x' e 'y' son posiciones
-      juego.ctx.fillRect(casilla.x, casilla.y, casilla.w, casilla.h);
-    }
-
-    juego.ctx.restore();
-
-    //pintar letras en negro
-    juego.ctx.fillStyle = "#000";
-    juego.ctx.font = "30px Arial";
-	  // 'x' e 'y'
-    juego.ctx.fillText(main.jugador.username, 5, 30);
-
-    if (juego.isRunning) requestAnimationFrame(juego.render);
   }
 }
 
