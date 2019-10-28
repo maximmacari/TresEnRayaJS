@@ -23,38 +23,6 @@ function postUsuario(){
   //getUsuario(jugador)
 }
 
-function getUsuario(objetoJSON){
-  let dato = JSON.parse(objetoJSON)
-  let tabla =`
-      <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Usuario</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>${dato.username}</td>
-            </tr>
-        </tbody>
-    </table>
-    <table class="table table-striped">
-      <thead>
-          <tr>
-              <th>Maxima Puntuación</th>
-          </tr>
-      </thead>
-      <tbody>
-          <tr>
-              <td>${dato.maxScore}</td>
-          </tr>
-      </tbody>
-    </table>
-    <button onclick="borrarSesion()" >Borrar</button>
-  `
-  usuario.innerHTML = tabla
-}
-
 function peticionPost(usuarioPost){
   let usuarioJSON = JSON.stringify(usuarioPost)
   let xhttp = new XMLHttpRequest();
@@ -98,10 +66,51 @@ function peticionGet(usuario){
 //   };
 // });
 
-function login(){
-  let 
+function registrar(){
+  let formulario = `
+  <form id="formLogin">
+  <h4 class="text-center">Iniciar sesión</h4>
+  <div class="form-group">
+    <label for="username">Usuario</label>
+    <input type="text" class="form-control" name="username" placeholder="Nombre de usuario">
+  </div>
+  <div class="form-group">
+    <label for="password">Introduce tu contraseña:</label>
+    <input type="password" class="form-control" name="password" placeholder="Contraseña">
+  </div>
+  <input type="button" value="Enviar" onclick="main.logIn()" class="btn btn-primary btn-block" />
+</form>
+  `
 }
 
-function tablaUsuario(){
-  
+function tablaUsuario(objetoJSON){
+  let dato = JSON.parse(objetoJSON)
+  let tabla =`
+      <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Usuario</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>${dato.username}</td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-striped">
+      <thead>
+          <tr>
+              <th>Maxima Puntuación</th>
+          </tr>
+      </thead>
+      <tbody>
+          <tr>
+              <td>${dato.maxScore}</td>
+          </tr>
+      </tbody>
+    </table>
+    <button onclick="borrarSesion()" >Borrar</button>
+  `.trim()
+  espacioUsuario = tabla
 }
