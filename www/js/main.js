@@ -184,6 +184,10 @@ function logIn(){
 
 }
 
+window.addEventListener("DOMLoaded",()=>{
+
+});
+
 window.addEventListener("load", () => {
   tools = new Tools();
   main = new Main();

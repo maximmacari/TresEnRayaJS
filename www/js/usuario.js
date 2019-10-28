@@ -8,9 +8,9 @@ var sesion = new SesionUsuario();
 //Comprobar si hay usuario en localstorage
 window.addEventListener("DOMContentLoaded",()=>{
   if(localStorage.getItem("username")!=null){
-    getUsuario(sesion.cargarUsuario())
+    tablaUsuario(sesion.cargarUsuario())
   }else{
-
+    registrar()
   }
 });
 
