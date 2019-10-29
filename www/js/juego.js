@@ -12,11 +12,11 @@ class Juego{
     this.casillas = [];
   }
 
-  canvasCalcOffset(){
-    let bounds = this.canvas.getBoundingClientRect();
-    this.offsetX = bounds.left;
-    this.offsetY = bounds.top;  
-  }
+  // canvasCalcOffset(){
+  //   let bounds = this.canvas.getBoundingClientRect();
+  //   this.offsetX = bounds.left;
+  //   this.offsetY = bounds.top;  
+  // }
 
   eventosCasilla(){
     for(let casilla of this.casillas){
@@ -29,6 +29,31 @@ class Juego{
     }
   }
 
+  generarTablero(sala){
+    let nCasillas = [3, 3];
+  
+    this.casillas = [];
+  
+    for(let i=0;i<nCasillas[1];i++){
+      let filaCasillas = [];
+  
+      for(let k=0;k<nCasillas[0];k++){
+        let casilla = {
+          position: {
+            x: k,
+            y: i
+          },
+          value: "none"
+        };
+  
+        filaCasillas.push(casilla);
+      }
+  
+      sala.tablero.push(filaCasillas);
+    }
+  }
+
+  //Borra la tabla entera y la vuelve a pintar
   pintarCasillas(){
     this.tablero.innerHTML = "";
     
