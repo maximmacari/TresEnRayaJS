@@ -9,6 +9,7 @@ var wsServer = null;
 var salas = [];
 var clientes = [];
 
+//Creación de MiddleWare, que tiene acceso a las solicitudes(request) y las respuestas(response) de la aplicación.
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(express.static('./www'));
@@ -20,12 +21,17 @@ app.use((req, res, next) => {
   next();
 });
 
+
+//BBDD usuario
 function initUsersDb() {
+
+  //Busca la BBDD si no la encuentra la crea, en caso contrario imprimira el error.
   let db = new sqlite3.Database('./db/usuarios.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
     if (err) {
       console.error(err.message);
     }
 
+    //definición tabla usuario
     let initQuery = `
     CREATE TABLE IF NOT EXISTS usuarios (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -47,6 +53,7 @@ function initUsersDb() {
   });
 }
 
+//Funcion para crear el lienzo del juego
 function generarTablero(sala){
   let nCasillas = [3, 3];
 
@@ -70,6 +77,8 @@ function generarTablero(sala){
     sala.tablero.push(filaCasillas);
   }
 }
+
+
 
 function initWsServer() {
   wsServer = new WebSocket.Server({ port: 4741 });
@@ -175,13 +184,14 @@ function initWsServer() {
   });
 }
 
+//te envia a la página principal
 app.get('/', function (req, res) {
   res.sendFile('./views/index.html', { root: __dirname });
 });
 
+//
 app.post('/getView', function (req, res) {
   console.log(req.body);
-
   res.sendFile(`./views/${req.body.pagina}`, { root: __dirname });
 });
 
