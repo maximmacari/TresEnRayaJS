@@ -11,4 +11,5 @@ div.espacio {
     background: RGB(194,197,204,0.35);
     border-bottom: 1px solid blue;
     border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
 }
