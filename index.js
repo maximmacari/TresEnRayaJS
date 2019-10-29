@@ -189,7 +189,7 @@ app.get('/', function (req, res) {
   res.sendFile('./views/index.html', { root: __dirname });
 });
 
-//
+//recibe un objeto json que es el usuario
 app.post('/getView', function (req, res) {
   console.log(req.body);
   res.sendFile(`./views/${req.body.pagina}`, { root: __dirname });
@@ -203,6 +203,7 @@ app.post('/login', function (req, res) {
     hash: "prueba"
   };
 
+  //buscar la BBDD de usuario
   let db = new sqlite3.Database('./db/usuarios.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
     if (err) {
       console.error(err.message);
@@ -254,9 +255,11 @@ app.post('/signup', function (req, res) {
     }
   });
 
+  //var query insertar usuario
   let insertSignUp = `
     INSERT INTO usuarios (username, passwd) VALUES (?, ?)
   `.trim();
+  //var query seleccionar usuario de BBD para el login
   let queryLogin = `
     SELECT * FROM usuarios WHERE
     username = ? AND passwd = ?
