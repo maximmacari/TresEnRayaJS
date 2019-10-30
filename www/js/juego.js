@@ -126,6 +126,8 @@ class Juego{
   }
 
   init(){
+    main.displayJuego();
+    
     window.WebSocket = window.WebSocket || window.MozWebSocket;
 
     this.ws = new WebSocket('ws://192.168.3.146:4741');

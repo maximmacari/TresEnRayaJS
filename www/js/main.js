@@ -1,6 +1,9 @@
 class Main{
   constructor(){
     this.formLogIn = document.getElementById("formLogin");
+    this.contSalas = document.getElementById("contSalas");
+    this.contJuego = document.getElementById("contJuego");
+
     this.jugador = {
       username: "none",
       hash: "",
@@ -11,8 +14,8 @@ class Main{
   }
   
   comprobacionUsuario(){
-    if(localStorage.getItem("username")!==null){
-      tablaUsuario(sesionUsuario.getUsuarioLocal())
+    if(localStorage.getItem("username") !== null){
+      tablaUsuario(sesion.getUsuarioLocal())
     }
   }
 
@@ -28,10 +31,11 @@ class Main{
       if(resp.loginState){
         tools.showModal("Iniciar sesión", `Has iniciado sesión, bienvenido ${dataSend.username}`);
         
-        this.jugador.username = resp.username;
-        this.jugador.maxScore = resp.maxScore;
-        this.jugador.hash = resp.hash;
+        main.jugador.username = resp.username;
+        main.jugador.maxScore = resp.maxScore;
+        main.jugador.hash = resp.hash;
         sesionUsuario.guardarUsuario(dataSend)
+        main.listarSalas();
       }else{
         tools.showModal("Iniciar sesión", "Usuario o contraseña incorrectos");
         confirm("¿Deseas registrarte con estos datos?");
@@ -55,7 +59,9 @@ class Main{
     tools.httpPost("/crearSala", JSON.stringify(dataSend), function(msg){
       let resp = JSON.parse(msg);
       
-      alert(`State: ${resp.result} | MSG: ${resp.msg}`);
+      tools.showModal("Crear sala", resp.msg);
+
+      main.listarSalas();
     }, function(err){
       console.error(err);
     });
@@ -104,17 +110,40 @@ class Main{
           ${sala.nombre}
         </td>
         <td class="text-center">
-          <button class="btn btn-primary btn-block">Entrar</button>
+          <button class="btn btn-primary btn-block btn-entrar-sala">Entrar</button>
         </td>
         `.trim();
 
         let tr = document.createElement("tr");
         tr.innerHTML = htmlSala;
 
+        tr.getElementsByClassName("btn-entrar-sala")[0].addEventListener("click", function(){
+          let claveSala = prompt("Introduce clave para la sala [" + sala.nombre + "]");
+          
+          main.entrarSala(sala.nombre, claveSala);
+        })
+
         tableSalas.appendChild(tr);
       }
     }, function(err){
       console.error(err);
     });
+  }
+
+  crearSalaManual(){
+    let nombreSala = prompt("Nombre de la sala: ");
+    let claveSala = prompt("Clave de la sala: ");
+
+    main.crearSala(nombreSala, claveSala);
+  }
+
+  displayJuego(){
+    this.contJuego.style.display = "block";
+    this.contSalas.style.display = "none";
+  }
+
+  displaySalas(){
+    this.contJuego.style.display = "none";
+    this.contSalas.style.display = "block";
   }
 }
