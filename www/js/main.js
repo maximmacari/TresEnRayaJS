@@ -56,7 +56,9 @@ class Main{
     tools.httpPost("/crearSala", JSON.stringify(dataSend), function(msg){
       let resp = JSON.parse(msg);
       
-      alert(`State: ${resp.result} | MSG: ${resp.msg}`);
+      tools.showModal("Crear sala", resp.msg);
+
+      main.listarSalas();
     }, function(err){
       console.error(err);
     });
@@ -121,5 +123,12 @@ class Main{
     }, function(err){
       console.error(err);
     });
+  }
+
+  crearSalaManual(){
+    let nombreSala = prompt("Nombre de la sala: ");
+    let claveSala = prompt("Clave de la sala: ");
+
+    main.crearSala(nombreSala, claveSala);
   }
 }
