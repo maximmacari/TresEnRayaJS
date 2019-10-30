@@ -2,3 +2,7 @@
     margin-left: 100px;
     padding-right: 100px;
 }
+
+body{
+    background-image: url(../res/img/back.png);
+}

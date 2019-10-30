@@ -16,3 +16,7 @@ div.espacio {
     transform: scale(1.09, 1.09);
     font-size: 100%;
 }
+
+body{
+    background-image: url(../res/img/back.png);
+}
