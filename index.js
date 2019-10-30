@@ -9,6 +9,7 @@ var wsServer = null;
 var salas = [];
 var clientes = [];
 
+//Creación de MiddleWare, que tiene acceso a las solicitudes(request) y las respuestas(response) de la aplicación.
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(express.static('./www'));
@@ -20,12 +21,17 @@ app.use((req, res, next) => {
   next();
 });
 
+
+//BBDD usuario
 function initUsersDb() {
+
+  //Busca la BBDD si no la encuentra la crea, en caso contrario imprimira el error.
   let db = new sqlite3.Database('./db/usuarios.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
     if (err) {
       console.error(err.message);
     }
 
+    //definición tabla usuario
     let initQuery = `
     CREATE TABLE IF NOT EXISTS usuarios (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -47,7 +53,19 @@ function initUsersDb() {
   });
 }
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+//Funcion para crear el lienzo del juego
+function generarTablero(sala){
+=======
+function updateTableros() {
+
+}
+
+>>>>>>> 3401a1f03b10f6ecd5a41f3cb972b87b32841cbb
 function generarTablero(sala) {
+>>>>>>> 9acd833bf600014944a8fa9b20da0aeaaf7b6eb8
   let nCasillas = [3, 3];
 
   this.casillas = [];
@@ -70,6 +88,8 @@ function generarTablero(sala) {
     sala.tablero.push(filaCasillas);
   }
 }
+
+
 
 function initWsServer() {
   wsServer = new WebSocket.Server({ port: 4741 });
@@ -126,13 +146,14 @@ function initWsServer() {
   });
 }
 
+//te envia a la página principal
 app.get('/', function (req, res) {
   res.sendFile('./views/index.html', { root: __dirname });
 });
 
+//recibe un objeto json que es el usuario
 app.post('/getView', function (req, res) {
   console.log(req.body);
-
   res.sendFile(`./views/${req.body.pagina}`, { root: __dirname });
 });
 
@@ -144,6 +165,7 @@ app.post('/login', function (req, res) {
     hash: "prueba"
   };
 
+  //buscar la BBDD de usuario
   let db = new sqlite3.Database('./db/usuarios.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
     if (err) {
       console.error(err.message);
@@ -195,9 +217,11 @@ app.post('/signup', function (req, res) {
     }
   });
 
+  //var query insertar usuario
   let insertSignUp = `
     INSERT INTO usuarios (username, passwd) VALUES (?, ?)
   `.trim();
+  //var query seleccionar usuario de BBD para el login
   let queryLogin = `
     SELECT * FROM usuarios WHERE
     username = ? AND passwd = ?
