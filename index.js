@@ -47,10 +47,6 @@ function initUsersDb() {
   });
 }
 
-function updateTableros() {
-
-}
-
 function generarTablero(sala) {
   let nCasillas = [3, 3];
 
@@ -319,6 +315,7 @@ app.post("/entrarSala", function(req, res){
 
   res.send(JSON.stringify(dataSend));
 });
+
 
 app.get("/listSalas", function(req, res){
   res.send(JSON.stringify(salas));
