@@ -9,6 +9,12 @@ class Main{
     };
     this.sala = null;
   }
+  
+  comprobacionUsuario(){
+    if(localStorage.getItem("username")!==null){
+      tablaUsuario(sesion.getUsuarioLocal())
+    }
+  }
 
   logIn(){
     let dataSend = {
