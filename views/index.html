@@ -66,6 +66,36 @@
           </div>
           <input type="button" value="Enviar" onclick="main.logIn()" class="btn btn-primary btn-block" />
         </form>
+
+        <div id="tablaUsuario">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>Usuario</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td id="usuarioTabla"></td>
+              </tr>
+            </tbody>
+          </table>
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>Maxima Puntuación</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td id="puntuacionTabla"></td>
+              </tr>
+            </tbody>
+          </table>
+          <button onclick="main.cerrarSesion()">Borrar</button>
+
+        </div>
+
       </div>
       <div id="contenido" class="col-8 p-3" style="background-color:orange;">
         <div id="contSalas">
@@ -73,7 +103,8 @@
             <div class="row">
               <div class="col">
                 <button type="button" class="btn btn-primary" onclick="main.crearSalaManual()">Crear sala</button>
-                <button type="button" class="btn btn-primary ml-2" onclick="main.listarSalas()">Actualizar salas</button>
+                <button type="button" class="btn btn-primary ml-2" onclick="main.listarSalas()">Actualizar
+                  salas</button>
               </div>
             </div>
           </div>
