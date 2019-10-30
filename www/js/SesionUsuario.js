@@ -2,7 +2,7 @@ class SesionUsuario {
     constructor (){
 
     }
-    cargarUsuario(){
+    getUsuarioLocal(){
         let usuarioSesion = {}
         usuarioSesion.username = localStorage.getItem("username")
         usuarioSesion.maxScore = localStorage.getItem("maxScore")

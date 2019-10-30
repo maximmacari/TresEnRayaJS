@@ -5,14 +5,8 @@ let Usuario = {
 }
 var sesion = new SesionUsuario();
 
-//Comprobar si hay usuario en localstorage
-window.addEventListener("DOMContentLoaded",()=>{
-  if(localStorage.getItem("username")!=null){
-    tablaUsuario(sesion.cargarUsuario())
-  }else{
-    registrar()
-  }
-});
+//Comprobar si hay usuario en localstorage y si lo hay lo inserta en una tabla
+
 
 function postUsuario(){
   let jugador = Object.create(Usuario)
@@ -112,5 +106,5 @@ function tablaUsuario(objetoJSON){
     </table>
     <button onclick="borrarSesion()" >Borrar</button>
   `.trim()
-  espacioUsuario = tabla
+  espacioUsuario.innerHTML = tabla
 }

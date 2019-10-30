@@ -9,6 +9,12 @@ class Main{
     };
     this.sala = null;
   }
+  
+  comprobacionUsuario(){
+    if(localStorage.getItem("username")!==null){
+      tablaUsuario(sesion.getUsuarioLocal())
+    }
+  }
 
   logIn(){
     let dataSend = {
@@ -18,7 +24,7 @@ class Main{
 
     tools.httpPost("/login", JSON.stringify(dataSend), (msg) => {
       let resp = JSON.parse(msg);
-
+      //
       if(resp.loginState){
         tools.showModal("Iniciar sesión", `Has iniciado sesión, bienvenido ${dataSend.username}`);
         
@@ -29,6 +35,7 @@ class Main{
         main.listarSalas();
       }else{
         tools.showModal("Iniciar sesión", "Usuario o contraseña incorrectos");
+        confirm("¿Deseas registrarte con estos datos?");
       }
     }, (err) => {
       console.error(err);
