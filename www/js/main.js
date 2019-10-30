@@ -12,7 +12,7 @@ class Main{
   
   comprobacionUsuario(){
     if(localStorage.getItem("username")!==null){
-      tablaUsuario(sesion.getUsuarioLocal())
+      tablaUsuario(sesionUsuario.getUsuarioLocal())
     }
   }
 
@@ -31,6 +31,7 @@ class Main{
         this.jugador.username = resp.username;
         this.jugador.maxScore = resp.maxScore;
         this.jugador.hash = resp.hash;
+        sesionUsuario.guardarUsuario(dataSend)
       }else{
         tools.showModal("Iniciar sesión", "Usuario o contraseña incorrectos");
         confirm("¿Deseas registrarte con estos datos?");

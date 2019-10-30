@@ -52,20 +52,8 @@ function initUsersDb() {
     });
   });
 }
-
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
 //Funcion para crear el lienzo del juego
-function generarTablero(sala){
-=======
-function updateTableros() {
-
-}
-
->>>>>>> 3401a1f03b10f6ecd5a41f3cb972b87b32841cbb
 function generarTablero(sala) {
->>>>>>> 9acd833bf600014944a8fa9b20da0aeaaf7b6eb8
   let nCasillas = [3, 3];
 
   this.casillas = [];

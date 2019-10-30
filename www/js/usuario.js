@@ -1,47 +1,10 @@
-var tools = null
+
 let Usuario = {
   username  : null,
   pass  : null,
 }
-var sesion = new SesionUsuario();
-
 //Comprobar si hay usuario en localstorage y si lo hay lo inserta en una tabla
 
-
-function postUsuario(){
-  let jugador = Object.create(Usuario)
-  jugador.username = email.value
-  jugador.pass = pwd.value
-  console.log("Iniciando peticion post:"+jugador)
-  peticionPost(jugador)
-  //getUsuario(jugador)
-}
-
-function peticionPost(usuarioPost){
-  let usuarioJSON = JSON.stringify(usuarioPost)
-  let xhttp = new XMLHttpRequest();
-  xhttp.onreadystatechange = function () {
-    if (this.readyState == 4 && this.status == 200) {
-      console.log("Este es la respuesta"+this.response)
-      peticionGet(usuarioJSON)
-    }
-  };
-  xhttp.open("POST", "http://192.168.3.148:4740/signup", true);
-  xhttp.setRequestHeader("Content-Type", "application/json")
-  xhttp.send(usuarioJSON);
-}
-function peticionGet(usuario){
-  let xhttp = new XMLHttpRequest();
-  xhttp.onreadystatechange = function () {
-    if (this.readyState == 4 && this.status == 200) {
-      console.log("Este es la respuesta /login"+this.response)
-      getUsuario(this.response)
-    }
-  };
-  xhttp.open("POST", "http://192.168.3.148:4740/login", true);
-  xhttp.setRequestHeader("Content-Type", "application/json")
-  xhttp.send(usuario);
-}
 
 // window.addEventListener("DOMContentLoaded", () =>{
 //   tools = new Tool();
@@ -104,7 +67,7 @@ function tablaUsuario(objetoJSON){
           </tr>
       </tbody>
     </table>
-    <button onclick="borrarSesion()" >Borrar</button>
+    <button onclick="sesionUsuario.borrarSesion()" >Borrar</button>
   `.trim()
   espacioUsuario.innerHTML = tabla
 }

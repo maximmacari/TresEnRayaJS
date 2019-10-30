@@ -3,14 +3,15 @@ class SesionUsuario {
 
     }
     getUsuarioLocal(){
-        let usuarioSesion = {}
-        usuarioSesion.username = localStorage.getItem("username")
-        usuarioSesion.maxScore = localStorage.getItem("maxScore")
+        let usuarioStorage = {}
+        usuarioStorage.username = localStorage.getItem("username")
+        usuarioStorage.maxScore = localStorage.getItem("maxScore")
 
-        return JSON.stringify(usuarioSesion);
+        return JSON.stringify(usuarioStorage);
     }
     guardarUsuario(usuarioSesion){
         localStorage.setItem("username",usuarioSesion.username);
+        localStorage.setItem("password",usuarioSesion.password)
         localStorage.setItem("maxScore",usuarioSesion.maxScore);
     }
     borrarSesion(){
