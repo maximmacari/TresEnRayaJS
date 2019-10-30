@@ -9,7 +9,6 @@ var wsServer = null;
 var salas = [];
 var clientes = [];
 
-//Creación de MiddleWare, que tiene acceso a las solicitudes(request) y las respuestas(response) de la aplicación.
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(express.static('./www'));
@@ -21,17 +20,12 @@ app.use((req, res, next) => {
   next();
 });
 
-
-//BBDD usuario
 function initUsersDb() {
-
-  //Busca la BBDD si no la encuentra la crea, en caso contrario imprimira el error.
   let db = new sqlite3.Database('./db/usuarios.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
     if (err) {
       console.error(err.message);
     }
 
-    //definición tabla usuario
     let initQuery = `
     CREATE TABLE IF NOT EXISTS usuarios (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -53,19 +47,7 @@ function initUsersDb() {
   });
 }
 
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-//Funcion para crear el lienzo del juego
-function generarTablero(sala){
-=======
-function updateTableros() {
-
-}
-
->>>>>>> 3401a1f03b10f6ecd5a41f3cb972b87b32841cbb
 function generarTablero(sala) {
->>>>>>> 9acd833bf600014944a8fa9b20da0aeaaf7b6eb8
   let nCasillas = [3, 3];
 
   this.casillas = [];
@@ -88,8 +70,6 @@ function generarTablero(sala) {
     sala.tablero.push(filaCasillas);
   }
 }
-
-
 
 function initWsServer() {
   wsServer = new WebSocket.Server({ port: 4741 });
@@ -146,14 +126,13 @@ function initWsServer() {
   });
 }
 
-//te envia a la página principal
 app.get('/', function (req, res) {
   res.sendFile('./views/index.html', { root: __dirname });
 });
 
-//recibe un objeto json que es el usuario
 app.post('/getView', function (req, res) {
   console.log(req.body);
+
   res.sendFile(`./views/${req.body.pagina}`, { root: __dirname });
 });
 
@@ -165,7 +144,6 @@ app.post('/login', function (req, res) {
     hash: "prueba"
   };
 
-  //buscar la BBDD de usuario
   let db = new sqlite3.Database('./db/usuarios.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
     if (err) {
       console.error(err.message);
@@ -217,11 +195,9 @@ app.post('/signup', function (req, res) {
     }
   });
 
-  //var query insertar usuario
   let insertSignUp = `
     INSERT INTO usuarios (username, passwd) VALUES (?, ?)
   `.trim();
-  //var query seleccionar usuario de BBD para el login
   let queryLogin = `
     SELECT * FROM usuarios WHERE
     username = ? AND passwd = ?
@@ -272,20 +248,33 @@ app.post("/crearSala", function(req, res){
   };
 
   try{
-    let sala = {
-      nombre: req.body.nombreSala,
-      clave: req.body.claveSala,
-      creador: req.body.jugador,
-      jugadores: [null, null],
-      tablero: []
-    };
-  
-    generarTablero(sala);
-  
-    salas.push(sala);
+    let existe = false;
+
+    for(let sala of salas){
+      if(sala.nombre === req.body.nombreSala){
+        existe = true;
+      }
+    }
+
+    if(!existe){
+      let sala = {
+        nombre: req.body.nombreSala,
+        clave: req.body.claveSala,
+        creador: req.body.jugador,
+        jugadores: [null, null],
+        tablero: []
+      };
     
-    dataSend.result = true;
-    dataSend.msg = "Sala [" + sala.nombre + "] creada!";
+      generarTablero(sala);
+    
+      salas.push(sala);
+      
+      dataSend.result = true;
+      dataSend.msg = "Sala [" + sala.nombre + "] creada!";
+    }else{
+      dataSend.result = false;
+      dataSend.msg = "La sala [" + sala.nombre + "] ya existe, no creada";
+    }
   }catch(err){
     dataSend.result = false;
     dataSend.msg = "Sala no creada";
@@ -340,6 +329,7 @@ app.post("/entrarSala", function(req, res){
   res.send(JSON.stringify(dataSend));
 });
 
+app.post("/setMaxScore")
 
 app.get("/listSalas", function(req, res){
   res.send(JSON.stringify(salas));

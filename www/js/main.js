@@ -22,9 +22,11 @@ class Main{
       if(resp.loginState){
         tools.showModal("Iniciar sesión", `Has iniciado sesión, bienvenido ${dataSend.username}`);
         
-        this.jugador.username = resp.username;
-        this.jugador.maxScore = resp.maxScore;
-        this.jugador.hash = resp.hash;
+        main.jugador.username = resp.username;
+        main.jugador.maxScore = resp.maxScore;
+        main.jugador.hash = resp.hash;
+
+        main.listarSalas();
       }else{
         tools.showModal("Iniciar sesión", "Usuario o contraseña incorrectos");
       }
@@ -96,12 +98,16 @@ class Main{
           ${sala.nombre}
         </td>
         <td class="text-center">
-          <button class="btn btn-primary btn-block">Entrar</button>
+          <button class="btn btn-primary btn-block btn-entrar-sala">Entrar</button>
         </td>
         `.trim();
 
         let tr = document.createElement("tr");
         tr.innerHTML = htmlSala;
+
+        tr.getElementsByClassName("btn-entrar-sala")[0].addEventListener("click", function(){
+          main.entrarSala(sala.nombre, prompt("Introduce clave para la sala [" + sala.nombre + "]"));
+        })
 
         tableSalas.appendChild(tr);
       }
