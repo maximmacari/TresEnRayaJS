@@ -18,15 +18,16 @@ class Juego{
   //   this.offsetY = bounds.top;  
   // }
 
-  eventosCasilla(){
-    for(let casilla of this.casillas){
-      casilla.elem.addEventListener("click", () => {
-        let tipo = "cruz";
+  celdaClick(position){
+    let dataSend = {
+      type: "celdaClick",
+      data:{
+        nombreSala: main.sala,
+        position: position
+      }
+    };
 
-        casilla.elem.getElementsByClassName(tipo)[0]
-          .style.display="block";
-      });
-    }
+    this.ws.send(JSON.stringify(dataSend));
   }
 
   generarTablero(sala){
@@ -88,6 +89,10 @@ class Juego{
 
         }
 
+        celdaCasilla.addEventListener("click", () => {
+          juego.celdaClick(celda.position);
+        });
+
         row.appendChild(celdaCasilla);
       }
 
@@ -121,16 +126,14 @@ class Juego{
   }
 
   init(){
-    this.generarCasillas();
-
     window.WebSocket = window.WebSocket || window.MozWebSocket;
 
-    this.ws = new WebSocket('ws://localhost:4741');
+    this.ws = new WebSocket('ws://192.168.3.146:4741');
 
     this.ws.onopen = function () {
       console.log("OPEN");
       let userData = {
-        nombre: main.jugador.username
+        username: main.jugador.username
       };
 
       let dataSend = {
@@ -139,11 +142,25 @@ class Juego{
       };
 
       juego.ws.send(JSON.stringify(dataSend));
+
+      juego.intervalUpdate = setInterval(function(){
+        let dataSend = {
+          type: "getTablero",
+          data: {
+            nombreSala: main.sala
+          }
+        };
+
+        juego.ws.send(JSON.stringify(dataSend));
+      }, 1000);
     };
 
+    this.ws.onclose = function(){
+      console.log("Conexión cerrada");
+    }
+
     this.ws.onerror = function (error) {
-      console.error(error);
-      
+      console.error("ERROR WS: " + error);
     };
 
     this.ws.onmessage = function (message) {
@@ -157,7 +174,7 @@ class Juego{
             let root = document.createElement("div");
             let html = `
               <li>
-                ${client.nombre} - ${client.nivel}
+                ${client.username}
               </li>
             `.trim();
             root.innerHTML = html;
@@ -165,8 +182,9 @@ class Juego{
             juego.usuariosList.getElementsByTagName("ul")[0]
             .appendChild(root.firstChild);
           }
-        }else{
-
+        }else if(msg.type === "tablero"){
+          juego.casillas = msg.data.tablero;
+          juego.pintarCasillas();
         }
       } catch (e) {
         console.error(e);
@@ -175,16 +193,6 @@ class Juego{
       }
       // handle incoming message
     };
-
-    setInterval(function(){
-      let dataSend = {
-        type: "getMap",
-        data: ""
-      };
-	  
-      juego.ws.send(JSON.stringify(dataSend));
-      juego.update();
-    }, 500);
   }
 
   update(){

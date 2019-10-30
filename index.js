@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const bodyParser = require('body-parser')
+const bodyParser = require('body-parser');
 const WebSocket = require('ws');
 const sqlite3 = require('sqlite3').verbose();
 
@@ -41,7 +41,7 @@ function initUsersDb() {
     );
     `.trim();
 
-    db.exec(initQuery, function(err, stmt) {
+    db.exec(initQuery, function (err, stmt) {
 
     });
 
@@ -53,16 +53,24 @@ function initUsersDb() {
   });
 }
 
+<<<<<<< HEAD
 //Funcion para crear el lienzo del juego
 function generarTablero(sala){
+=======
+function updateTableros() {
+
+}
+
+function generarTablero(sala) {
+>>>>>>> 9acd833bf600014944a8fa9b20da0aeaaf7b6eb8
   let nCasillas = [3, 3];
 
   this.casillas = [];
 
-  for(let i=0;i<nCasillas[1];i++){
+  for (let i = 0; i < nCasillas[1]; i++) {
     let filaCasillas = [];
 
-    for(let k=0;k<nCasillas[0];k++){
+    for (let k = 0; k < nCasillas[0]; k++) {
       let casilla = {
         position: {
           x: k,
@@ -89,95 +97,46 @@ function initWsServer() {
       let msg = JSON.parse(message);
 
       if (msg.type) {
-        switch (msg.type) {
-          case "userData":
-            let cliente = {
-              username: msg.data.username,
-              ip: req.connection.remoteAddress
-            };
+        if (msg.type === "userData") {
+          let cliente = {
+            username: msg.data.username,
+            ip: req.connection.remoteAddress,
+            ws: ws
+          };
 
-            clientes.push(cliente);
+          clientes.push(cliente);
 
-            console.log("New user: " + cliente.nombre);
+          console.log("New user: " + cliente.username);
 
-            let dataSend = {
-              type: "clients",
-              data: clientes
-            };
+          let dataSend = {
+            type: "clients",
+            data: clientes
+          };
 
-            ws.send(JSON.stringify(dataSend));
-
-            break;
-          case "entrarSala":
-            let dataSend = {
-              type: "entrarSala",
-              result: false,
-              msg: ""
-            }
-
-            let salaEncontrada = false;
-          
-            for(let sala of salas){
-              if(sala.nombre === msg.data.nombreSala){
-                let libre = false;
-
-                salaEncontrada = true;
-                
-                if(sala.clave === msg.data.claveSala){
-                  for(let i=0;i<salas.jugadores.length;i++){
-                    if(salas.jugadores[i] !== null){
-                      libre = true;
-  
-                      salas.jugadores = msg.data.jugador;
-                    }
-                  }
-  
-                  if(libre){
-                    dataSend.result = false;
-                    dataSend.msg = "Sala llena"
-                  }else{
-                    dataSend.result = true;
-                    dataSend.msg = "Has entrado a la sala"
-                  }  
-                }else{
-                  dataSend.result = false;
-                  dataSend.msg = "Clave incorrecta";
-                }
-              }
-            }
-
-            if(!salaEncontrada){
-              dataSend.result = false;
-              dataSend.msg = "Sala no encontrada";
-            }
-
-            ws.send(JSON.stringify(dataSend));
-
-            break;
-          case "crearSala":
-            let dataSend = {
-              type: "crearSala",
-              result: false,
-              msg: ""
-            };
-
-            let sala = {
-              nombre: msg.data.nombreSala,
-              clave: msg.data.claveSala,
-              creador: msg.data.jugador,
-              jugadores: [null, null],
+          ws.send(JSON.stringify(dataSend));
+        }else if(msg.type === "getTablero"){
+          let dataSend = {
+            type: "tablero",
+            data: {
               tablero: []
-            };
+            }
+          };
+          
+          for(let sala of salas){
+            if(sala.nombre === msg.data.nombreSala){
+              dataSend.data.tablero = sala.tablero;
+            }
+          }
 
-            generarTablero(sala);
+          ws.send(JSON.stringify(dataSend));
+        }else if(msg.type === "celdaClick"){
+          let position = msg.data.position;
 
-            salas.push(sala);
-
-            console.log(sala);
-
-            ws.send(JSON.stringify(dataSend));
-
-            break;
+          for(let sala of salas){
+            if(sala.nombre === msg.data.nombreSala){
+              sala.tablero[position.y][position.x].value = "cruz";
+            }
+          }
         }
       }
     });
@@ -299,9 +258,87 @@ app.post('/signup', function (req, res) {
 
       res.send(JSON.stringify(dataSend));
     }
-
-
   });
+});
+
+app.post("/crearSala", function(req, res){
+  let dataSend = {
+    type: "crearSala",
+    result: false,
+    msg: ""
+  };
+
+  try{
+    let sala = {
+      nombre: req.body.nombreSala,
+      clave: req.body.claveSala,
+      creador: req.body.jugador,
+      jugadores: [null, null],
+      tablero: []
+    };
+  
+    generarTablero(sala);
+  
+    salas.push(sala);
+    
+    dataSend.result = true;
+    dataSend.msg = "Sala [" + sala.nombre + "] creada!";
+  }catch(err){
+    dataSend.result = false;
+    dataSend.msg = "Sala no creada";
+  }
+  
+  res.send(JSON.stringify(dataSend));
+});
+
+app.post("/entrarSala", function(req, res){
+  let dataSend = {
+    type: "entrarSala",
+    result: false,
+    msg: ""
+  }
+
+  let salaEncontrada = false;
+
+  for (let sala of salas) {
+    if (sala.nombre === req.body.nombreSala) {
+      let libre = false;
+
+      salaEncontrada = true;
+
+      if (sala.clave === req.body.claveSala) {
+        for (let i = 0; i < sala.jugadores.length; i++) {
+          if (sala.jugadores[i] !== null) {
+            libre = true;
+
+            salas.jugadores = req.body.jugador;
+          }
+        }
+
+        if (libre) {
+          dataSend.result = false;
+          dataSend.msg = "Sala llena"
+        } else {
+          dataSend.result = true;
+          dataSend.msg = "Has entrado a la sala"
+        }
+      } else {
+        dataSend.result = false;
+        dataSend.msg = "Clave incorrecta";
+      }
+    }
+  }
+
+  if (!salaEncontrada) {
+    dataSend.result = false;
+    dataSend.msg = "Sala no encontrada";
+  }
+
+  res.send(JSON.stringify(dataSend));
+});
+
+app.get("/listSalas", function(req, res){
+  res.send(JSON.stringify(salas));
 });
 
 initUsersDb();

@@ -1,3 +1,9 @@
+#contSalas{
+  background-color: #a4a4a4;
+  min-height: 400px;
+  overflow-y: auto;
+}
+
 #tablero{
   background-color: #14bdac;
   margin: 0 auto;
