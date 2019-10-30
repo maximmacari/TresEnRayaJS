@@ -3,13 +3,16 @@ div.espacio {
     padding-right: 10px;
 }
 
-#autor_card{
+.autor_card{
     background: RGB(194,197,204,0.25);
+    transition: 2s linear 0.07s;
 }
 
-#autor_card:hover{
+.autor_card:hover{
     background: RGB(194,197,204,0.35);
     border-bottom: 1px solid blue;
     border-top-right-radius: 10px;
     border-top-left-radius: 10px;
+    transform: scale(1.09, 1.09);
+    font-size: 100%;
 }
