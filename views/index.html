@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -26,9 +27,10 @@
 
 <body>
   <nav class="navbar navbar-expand-sm bg-secondary navbar-dark justify-content-center">
-      <div id="logotipo">
-          <img src="../res/img/tic-tac-toe.svg" alt="Logotipo."  width="50px" height="40px" onerror="this.onerror=null; this.src='../res/img/tic-tac-toe.png'">
-      </div>
+    <div id="logotipo">
+      <img src="../res/img/tic-tac-toe.svg" alt="Logotipo." width="50px" height="40px"
+        onerror="this.onerror=null; this.src='../res/img/tic-tac-toe.png'">
+    </div>
     <ul class="navbar-nav">
       <li class="nav-item active">
         <a class="nav-link" data-url="index.html">Juego</a>
@@ -62,26 +64,29 @@
       </div>
       <div id="contenido" class="col-8 p-3" style="background-color:orange;">
         <div id="contSalas">
-          <div class="container-fluid">
+          <div class="container-fluid bg-dark p-2 mb-2">
             <div class="row">
               <div class="col">
                 <button type="button" class="btn btn-primary" onclick="main.crearSalaManual()">Crear sala</button>
+                <button type="button" class="btn btn-primary ml-2" onclick="main.listarSalas()">Actualizar salas</button>
               </div>
-            </div> 
+            </div>
           </div>
-          <table id="tableSalas" class="table table-dark table-bordered">
-            <thead>
-              <tr>
-                <th class="text-center">Nombre sala</th>
-                <th class="text-center">Acciones</th>
-              </tr>
-            </thead>
-            <tbody>
+          <div class="cont-tabla">
+            <table id="tableSalas" class="table table-dark table-bordered">
+              <thead>
+                <tr>
+                  <th class="text-center">Nombre sala</th>
+                  <th class="text-center">Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
 
-            </tbody>
-          </table>
+              </tbody>
+            </table>
+          </div>
         </div>
-        <div id="contJuego">
+        <div id="contJuego" style="display: none">
           <div class="container-fluid">
             <div class="row">
               <div class="col text-center">Jugador 1</div>
@@ -90,7 +95,7 @@
           </div>
 
           <table id="tablero">
-            
+
           </table>
         </div>
       </div>
@@ -103,7 +108,7 @@
   </main>
 
   <div class="modal fade" role="dialog" id="modalTemplate">
-    
+
   </div>
 </body>
 

@@ -1,6 +1,9 @@
 class Main{
   constructor(){
     this.formLogIn = document.getElementById("formLogin");
+    this.contSalas = document.getElementById("contSalas");
+    this.contJuego = document.getElementById("contJuego");
+
     this.jugador = {
       username: "none",
       hash: "",
@@ -11,7 +14,7 @@ class Main{
   }
   
   comprobacionUsuario(){
-    if(localStorage.getItem("username")!==null){
+    if(localStorage.getItem("username") !== null){
       tablaUsuario(sesion.getUsuarioLocal())
     }
   }
@@ -115,7 +118,9 @@ class Main{
         tr.innerHTML = htmlSala;
 
         tr.getElementsByClassName("btn-entrar-sala")[0].addEventListener("click", function(){
-          main.entrarSala(sala.nombre, prompt("Introduce clave para la sala [" + sala.nombre + "]"));
+          let claveSala = prompt("Introduce clave para la sala [" + sala.nombre + "]");
+          
+          main.entrarSala(sala.nombre, claveSala);
         })
 
         tableSalas.appendChild(tr);
@@ -130,5 +135,15 @@ class Main{
     let claveSala = prompt("Clave de la sala: ");
 
     main.crearSala(nombreSala, claveSala);
+  }
+
+  displayJuego(){
+    this.contJuego.style.display = "block";
+    this.contSalas.style.display = "none";
+  }
+
+  displaySalas(){
+    this.contJuego.style.display = "none";
+    this.contSalas.style.display = "block";
   }
 }
