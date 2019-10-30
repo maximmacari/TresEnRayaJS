@@ -3,6 +3,7 @@ class Main{
     this.formLogIn = document.getElementById("formLogin");
     this.contSalas = document.getElementById("contSalas");
     this.contJuego = document.getElementById("contJuego");
+    this.tabla =
 
     this.jugador = {
       username: "none",
@@ -15,7 +16,7 @@ class Main{
   
   comprobacionUsuario(){
     if(localStorage.getItem("username") !== null){
-      tablaUsuario(sesion.getUsuarioLocal())
+      tablaUsuario(sesionUsuario.getUsuarioLocal())
     }
   }
 
@@ -34,18 +35,28 @@ class Main{
         main.jugador.username = resp.username;
         main.jugador.maxScore = resp.maxScore;
         main.jugador.hash = resp.hash;
-        sesionUsuario.guardarUsuario(dataSend)
+        sesionUsuario.guardarUsuario(dataSend, main.jugador.maxScore)
         main.listarSalas();
       }else{
         tools.showModal("Iniciar sesión", "Usuario o contraseña incorrectos");
-        confirm("¿Deseas registrarte con estos datos?");
+        if(confirm("¿Deseas registrarte con estos datos?"){
+          signUp(usuario, password)
+        }else{
+
+        }
+
       }
     }, (err) => {
       console.error(err);
     });
   }
 
+
   signUp(){
+
+  }
+  cerrarSesion(){
+    sesionUsuario.borrarSesion()
 
   }
 

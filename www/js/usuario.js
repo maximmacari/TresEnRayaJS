@@ -37,7 +37,7 @@ function registrar(){
   </div>
   <input type="button" value="Enviar" onclick="main.logIn()" class="btn btn-primary btn-block" />
 </form>
-  `
+  `.trim()
 }
 
 function tablaUsuario(objetoJSON){

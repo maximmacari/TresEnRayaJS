@@ -46,11 +46,6 @@ function initUsersDb() {
     });
   });
 }
-<<<<<<< HEAD
-//Funcion para crear el lienzo del juego
-=======
-
->>>>>>> 880002adf8ccf347726f5f3aec7a5e4fe0e38a35
 function generarTablero(sala) {
   let nCasillas = [3, 3];
 

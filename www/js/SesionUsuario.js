@@ -9,10 +9,10 @@ class SesionUsuario {
 
         return JSON.stringify(usuarioStorage);
     }
-    guardarUsuario(usuarioSesion){
+    guardarUsuario(usuarioSesion, score){
         localStorage.setItem("username",usuarioSesion.username);
         localStorage.setItem("password",usuarioSesion.password)
-        localStorage.setItem("maxScore",usuarioSesion.maxScore);
+        localStorage.setItem("maxScore",score);
     }
     borrarSesion(){
         localStorage.clear()
