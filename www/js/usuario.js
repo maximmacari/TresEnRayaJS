@@ -6,11 +6,7 @@ let Usuario = {
 var sesion = new SesionUsuario();
 
 //Comprobar si hay usuario en localstorage y si lo hay lo inserta en una tabla
-function comprobacionUsuario(){
-  if(localStorage.getItem("username")!==null){
-    tablaUsuario(sesion.getUsuarioLocal())
-  }
-}
+
 
 function postUsuario(){
   let jugador = Object.create(Usuario)

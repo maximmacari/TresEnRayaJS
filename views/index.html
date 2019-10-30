@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Document</title>
+  <title>Tres en raya JS - Proyecto 1</title>
   <!-- Latest compiled and minified CSS -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
   <link rel="stylesheet" href="css/style.css">
@@ -19,12 +19,16 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
   <script src="js/tools.js"></script>
+  <script src="js/inicializador.js"></script>
   <script src="js/juego.js"></script>
   <script src="js/main.js"></script>
 </head>
 
 <body>
   <nav class="navbar navbar-expand-sm bg-secondary navbar-dark justify-content-center">
+      <div id="logotipo">
+          <img src="../res/img/tic-tac-toe.svg" alt="Logotipo."  width="50px" height="40px" onerror="this.onerror=null; this.src='../res/img/tic-tac-toe.png'">
+      </div>
     <ul class="navbar-nav">
       <li class="nav-item active">
         <a class="nav-link" href="">Juego</a>
@@ -43,7 +47,7 @@
   <main class="container-fluid">
     <div class="row">
       <div class="col-2 pt-2" id="espacioUsuario">
-        <!-- <form id="formLogin">
+        <form id="formLogin">
           <h4 class="text-center">Iniciar sesión</h4>
           <div class="form-group">
             <label for="username">Usuario</label>
@@ -54,12 +58,34 @@
             <input type="password" class="form-control" name="password" placeholder="Contraseña">
           </div>
           <input type="button" value="Enviar" onclick="main.logIn()" class="btn btn-primary btn-block" />
-        </form> -->
+        </form>
       </div>
       <div id="contenido" class="col-8 p-3" style="background-color:orange;">
-        <table id="tablero">
-          
-        </table>
+        <div id="contSalas">
+          <table id="tableSalas" class="table table-dark table-bordered">
+            <thead>
+              <tr>
+                <th class="text-center">Nombre sala</th>
+                <th class="text-center">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+          </table>
+        </div>
+        <div id="contJuego">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col text-center">Jugador 1</div>
+              <div class="col text-center">Jugador 2</div>
+            </div>
+          </div>
+
+          <table id="tablero">
+            
+          </table>
+        </div>
       </div>
       <div id="usuariosList" class="col-2 p-0">
         <ul>
