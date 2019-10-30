@@ -3,12 +3,19 @@ div.espacio {
     padding-right: 10px;
 }
 
-#autor_card{
+.autor_card{
     background: RGB(194,197,204,0.25);
 }
 
-#autor_card:hover{
-    background: RGB(194,197,204,0.40);
-    border-bottom: 1px solid black;
-    border-inline-end-color: lightcoral;
+.autor_card:hover{
+    background: RGB(194,197,204,0.20);
+    border-bottom: 1px solid blue;
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+    transform: scale(1.1, 1.1);
+    transition: all 0.8s ease-in-out;
+}
+
+body{
+    background-image: url(../res/img/back.png);
 }

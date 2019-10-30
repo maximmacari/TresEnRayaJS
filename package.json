@@ -1,0 +1,18 @@
+{
+  "name": "proyecto1",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ."
+  },
+  "author": "Gabriel Revilla",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "sqlite3": "^4.1.0",
+    "websocket": "^1.0.30",
+    "ws": "^7.1.2"
+  }
+}

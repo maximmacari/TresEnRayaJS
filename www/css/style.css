@@ -1,0 +1,49 @@
+.cont-tabla{
+  background-color: #a4a4a4;
+  min-height: 400px;
+  overflow-y: auto;
+}
+
+#tablero{
+  background-color: #14bdac;
+  margin: 0 auto;
+  border-radius: 7px;
+}
+
+#tablero td{
+  padding: 5px;
+  border: 1px solid #000;
+}
+
+#usuariosList ul{
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.casilla{
+  width: 100px;
+  height: 100px;
+}
+
+.casilla-cruz{
+  stroke: rgb(84, 84, 84); 
+  stroke-dasharray: 135.764; 
+  stroke-dashoffset: 0;
+  fill: none;
+  stroke-width: 16px;
+}
+
+.casilla-circulo{
+  stroke: rgb(242, 235, 211); 
+  stroke-dasharray: 301.635; 
+  stroke-dashoffset: 0;
+  fill: none;
+  stroke-width: 16px;
+}
+
+#usuariosList ul > li{
+  width: 100%;
+  border-bottom: 1px solid black;
+  padding: 4px;
+}

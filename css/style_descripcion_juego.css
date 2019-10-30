@@ -33,5 +33,6 @@ footer {
 
 body{
     overflow-x:hidden;
+    background-image: url(../res/img/back.png);
 }
 
