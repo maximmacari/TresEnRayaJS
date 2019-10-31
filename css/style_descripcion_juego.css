@@ -40,7 +40,19 @@ body{
     overflow-x:hidden;
     background-image: url(../res/img/back.png);
 }
+/*navbar*/
 
 .navbar {
     background-color: #212529 !important;
+}
+
+.navbar-nav {
+    position: relative;
+    bottom: -8px;
+}
+
+.active{
+    height: auto;
+    border-bottom: 4px solid blue;
+    font-weight: bold;
 }
