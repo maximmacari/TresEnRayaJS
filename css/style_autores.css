@@ -3,20 +3,29 @@ div.espacio {
     padding-right: 10px;
 }
 
+#logotipo {
+    position: absolute;
+    left: 50px;
+}
+
+
 .autor_card{
     background: RGB(194,197,204,0.25);
-    transition: 2s linear 0.07s;
 }
 
 .autor_card:hover{
-    background: RGB(194,197,204,0.35);
+    background: RGB(194,197,204,0.20);
     border-bottom: 1px solid blue;
     border-top-right-radius: 10px;
     border-top-left-radius: 10px;
-    transform: scale(1.09, 1.09);
-    font-size: 100%;
+    transform: scale(1.1, 1.1);
+    transition: all 0.8s ease-in-out;
 }
 
 body{
     background-image: url(../res/img/back.png);
+}
+
+.navbar {
+    background-color: #212529 !important;
 }

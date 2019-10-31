@@ -46,7 +46,6 @@ function initUsersDb() {
     });
   });
 }
-
 function generarTablero(sala) {
   let nCasillas = [3, 3];
 

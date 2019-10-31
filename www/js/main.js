@@ -3,22 +3,24 @@ class Main{
     this.formLogIn = document.getElementById("formLogin");
     this.contSalas = document.getElementById("contSalas");
     this.contJuego = document.getElementById("contJuego");
+    this.tabla = document.getElementById("tablaUsuario")
 
     this.jugador = {
       username: "none",
       hash: "",
       maxScore: 0,
       score: 0
-    };
-
-
-
+    };  
     this.sala = null;
   }
   
   comprobacionUsuario(){
     if(localStorage.getItem("username") !== null){
-      tablaUsuario(sesion.getUsuarioLocal())
+      this.displayTabla()
+      console.log("Estamos en el if")
+    }else{
+      console.log("Estamos en el else")
+      this.tabla.style.display = "none"
     }
   }
 
@@ -37,18 +39,30 @@ class Main{
         main.jugador.username = resp.username;
         main.jugador.maxScore = resp.maxScore;
         main.jugador.hash = resp.hash;
-
+        sesionUsuario.guardarUsuario(dataSend, main.jugador.maxScore)
+        main.displayTabla();
         main.listarSalas();
       }else{
         tools.showModal("Iniciar sesión", "Usuario o contraseña incorrectos");
-        confirm("¿Deseas registrarte con estos datos?");
+        if(confirm("¿Deseas registrarte con estos datos?")){
+          signUp(usuario, password)
+        }else{
+
+        }
+
       }
     }, (err) => {
       console.error(err);
     });
   }
 
+
   signUp(){
+
+  }
+  cerrarSesion(){
+    sesionUsuario.borrarSesion()
+    this.dispalyLogin()
 
   }
 
@@ -149,6 +163,16 @@ class Main{
     this.contJuego.style.display = "none";
     this.contSalas.style.display = "block";
   }
+  displayTabla(){
+    this.tabla.style.display = "block"
+    usuarioTabla.innerHTML = localStorage.getItem("username")
+    puntuacionTabla.innerHTML = localStorage.getItem("maxScore")
+    this.formLogIn.style.display = "none" 
+  }
+  dispalyLogin(){
+    this.tabla.style.display = "none"
+    this.formLogIn.style.display = "block" 
+    console.log("displayLogin")
+  }
 
-  
 }
