@@ -1,0 +1,21 @@
+#logotipo {
+    margin-left: -100px;
+    padding-right: 100px;
+}
+
+
+body{
+    background-image: url(../res/img/back.png);
+}
+
+.navbar {
+    background-color: #212529 !important;
+}
+
+.p-2{
+    background-color: #212529 !important;
+}
+
+#tableSalas {
+    background-color: #212529 !important;
+}

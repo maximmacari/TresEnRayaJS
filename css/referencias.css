@@ -8,6 +8,16 @@
     margin-top: 50px;
 }
 
+#logotipo {
+    margin-left: -100px;
+    padding-right: 100px;
+}
+
+
 body{
     background-image: url(../res/img/back.png);
+}
+
+.navbar-dark {
+    background-color: #212529 !important;
 }

@@ -3,6 +3,11 @@ div.espacio {
     padding-right: 10px;
 }
 
+#logotipo {
+    margin-left: -100px;
+    padding-right: 100px;
+}
+
 .autor_card{
     background: RGB(194,197,204,0.25);
 }
@@ -18,4 +23,8 @@ div.espacio {
 
 body{
     background-image: url(../res/img/back.png);
+}
+
+.navbar {
+    background-color: #212529 !important;
 }

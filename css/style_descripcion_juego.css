@@ -2,6 +2,11 @@ body {
     overflow-x: hidden;
 }
 
+#logotipo {
+    margin-left: -100px;
+    padding-right: 100px;
+}
+
 #descripcion {
     border: 1px solid black;
     padding: 20px;
@@ -36,3 +41,6 @@ body{
     background-image: url(../res/img/back.png);
 }
 
+.navbar {
+    background-color: #212529 !important;
+}
