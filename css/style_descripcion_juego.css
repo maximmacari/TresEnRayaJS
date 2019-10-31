@@ -3,8 +3,8 @@ body {
 }
 
 #logotipo {
-    margin-left: -100px;
-    padding-right: 100px;
+    position: absolute;
+    left: 50px;
 }
 
 #descripcion {

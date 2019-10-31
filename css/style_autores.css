@@ -4,9 +4,10 @@ div.espacio {
 }
 
 #logotipo {
-    margin-left: -100px;
-    padding-right: 100px;
+    position: absolute;
+    left: 50px;
 }
+
 
 .autor_card{
     background: RGB(194,197,204,0.25);

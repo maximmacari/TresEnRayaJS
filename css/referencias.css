@@ -9,10 +9,9 @@
 }
 
 #logotipo {
-    margin-left: -100px;
-    padding-right: 100px;
+    position: absolute;
+    left: 50px;
 }
-
 
 body{
     background-image: url(../res/img/back.png);
