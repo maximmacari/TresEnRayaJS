@@ -10,6 +10,9 @@ class Main{
       maxScore: 0,
       score: 0
     };
+
+
+
     this.sala = null;
   }
   
@@ -146,4 +149,6 @@ class Main{
     this.contJuego.style.display = "none";
     this.contSalas.style.display = "block";
   }
+
+  
 }

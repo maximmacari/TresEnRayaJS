@@ -117,7 +117,7 @@ function initWsServer() {
 
           for(let sala of salas){
             if(sala.nombre === msg.data.nombreSala){
-              sala.tablero[position.y][position.x].value = "cruz";
+              sala.tablero[position.y][position.x].value = msg.data.jugador.ficha;
             }
           }
         }
