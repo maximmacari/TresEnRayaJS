@@ -93,7 +93,7 @@ class Main{
   entrarSala(nombreSala, claveSala){
     if(this.sala === null){
       let dataSend = {
-        jugador: this.jugadorHash,
+        jugadorHash: this.jugadorHash,
         nombreSala: nombreSala,
         claveSala: claveSala
       };

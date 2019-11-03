@@ -18,13 +18,11 @@ class Juego{
       data:{
         nombreSala: main.sala,
         position: position,
-        jugador: main.jugadorHash
+        jugadorHash: main.jugadorHash
       }
     };
 
     this.ws.send(JSON.stringify(dataSend));
-
-    setTimeout(juego.requestTablero, 100);
   }
 
   generarTablero(sala){
@@ -141,11 +139,18 @@ class Juego{
     this.ws = new WebSocket('ws://localhost:4741');
 
     this.ws.onopen = function () {
-      
+      let dataSend = {
+        type: "registrarJugador",
+        data: {
+          jugadorHash: main.jugadorHash
+        }
+      };
+      juego.ws.send(JSON.stringify(dataSend));
 
+      juego.requestTablero();
       juego.intervalUpdate = setInterval(function(){
         juego.requestTablero();
-      }, 1000);
+      }, 10000);
     };
 
     this.ws.onclose = function(){
@@ -161,8 +166,6 @@ class Juego{
     this.ws.onmessage = function (message) {
       try {
         let msg = JSON.parse(message.data);
-
-        console.log(msg);
 
         if(msg.type === "clients"){
           for(let client of msg.data){
@@ -180,9 +183,12 @@ class Juego{
         }else if(msg.type === "tablero"){
           juego.casillas = msg.data.tablero;
           juego.pintarCasillas();
-
-          console.log("TABLERO");
-          
+        }else if(msg.type === "registrarJugador"){
+          if(msg.data.result){
+            console.log("JUGADOR REGISTRADO");  
+          }else{
+            console.log("ERROR AL REGISTRAR JUGADOR");
+          }
         }
       } catch (e) {
         console.error(e);

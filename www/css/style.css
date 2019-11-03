@@ -59,8 +59,15 @@ body{
 
 #usuariosList ul > li{
   width: 100%;
-  border-bottom: 1px solid black;
+  border-bottom: 2px solid black;
   padding: 4px;
+}
+
+.jugador-display{
+  padding: 2px;
+  border: 1px solid #7c5b00;
+  background-color: #FF9933;
+  border-radius: 7px;
 }
 
 /*Descripción juego*/

@@ -31,7 +31,9 @@ app.use((req, res, next) => {
   next();
 });
 
-function Cliente(username, hash, maxScore) {
+function Cliente(id, username, hash, maxScore) {
+  this.ws = null;
+  this.id = id;
   this.username = username;
   this.hash = hash;
   this.maxScore = maxScore;
@@ -43,6 +45,34 @@ function Sala(nombreSala, claveSala, jugador) {
   this.creador = jugador;
   this.jugadores = [null, null];
   this.tablero = [];
+}
+
+function enviarTablero(ws, nombreSala){
+  let dataSend = {
+    type: "tablero",
+    data: {
+      tablero: []
+    }
+  };
+
+  for (let sala of salas) {
+    if (sala.nombre === nombreSala) {
+      dataSend.data.tablero = sala.tablero;
+    }
+  }
+
+  ws.send(JSON.stringify(dataSend));
+}
+
+function searchCliente(hash) {
+  let cliente = null;
+  for (let clienteAux of clientes) {
+    if (clienteAux.hash === hash) {
+      cliente = clienteAux;
+    }
+  }
+
+  return cliente;
 }
 
 function initUsersDb() {
@@ -104,55 +134,64 @@ function initWsServer() {
       let msg = JSON.parse(message);
 
       if(msg.type === "registrarJugador"){
-        let jugador = null;
-
-        for(let jugadorAux of clientes){
-          if(jugadorAux.hash === msg.data.jugador){
-            jugador = jugadorAux;
-          }
-        }
-
-
-      }else if (msg.type === "getTablero") {
         let dataSend = {
-          type: "tablero",
+          type: "registrarJugador",
           data: {
-            tablero: []
+            result: false
           }
         };
+        let registrado = false;
 
-        for (let sala of salas) {
-          if (sala.nombre === msg.data.nombreSala) {
-            dataSend.data.tablero = sala.tablero;
+        console.log(clientes, msg.data.jugadorHash);
+        
+
+        for(let i=0; i<clientes.length; i++){
+          if(clientes[i].hash === msg.data.jugadorHash){
+            clientes[i].ws = ws;
+
+            registrado = true;
           }
         }
+
+        dataSend.data.result = registrado;
 
         ws.send(JSON.stringify(dataSend));
+      }else if (msg.type === "getTablero") {
+
+        enviarTablero(ws, msg.data.nombreSala);
       } else if (msg.type === "celdaClick") {
         let position = msg.data.position;
-        let jugador = null;
+        let sala = null;
 
-        for (let cliente of clientes) {
-          if (cliente.hash === msg.data.jugador) {
-            jugador = cliente;
+        for (let salaAux of salas) {
+          if (salaAux.nombre === msg.data.nombreSala) {
+            sala = salaAux;
           }
         }
 
-        for (let sala of salas) {
-          if (sala.nombre === msg.data.nombreSala) {
-            let ficha = "none";
+        if(sala !== null){
+          let ficha = "none";
 
-            for (let j = 0; j < sala.jugadores.lenght; j++) {
-              if (sala.jugadores[j].hash === msg.data.jugador) {
-                if (j === 0) {
-                  ficha = "cruz";
-                } else {
-                  ficha = "circulo";
-                }
+          for (let j=0; j<sala.jugadores.length; j++) {
+            if (sala.jugadores[j] === msg.data.jugadorHash) {
+              if (j === 0) {
+                ficha = "cruz";
+              } else if(j === 1) {
+                ficha = "circulo";
               }
             }
+          }
 
-            sala.tablero[position.y][position.x].value = ficha;
+          sala.tablero[position.y][position.x].value = ficha;
+
+          for(let jugadorAux of sala.jugadores){
+            if(jugadorAux !== null){
+              let jugador = searchCliente(jugadorAux);
+
+              if(jugador !== null){
+                enviarTablero(jugador.ws, sala.nombre);
+              }
+            }
           }
         }
       } else if (msg.type === "infoSala") {
@@ -181,8 +220,6 @@ app.get('/', function (req, res) {
 });
 
 app.post('/getView', function (req, res) {
-  console.log(req.body);
-
   res.sendFile(`./views/${req.body.pagina}`, { root: __dirname });
 });
 
@@ -375,27 +412,27 @@ app.post("/entrarSala", function (req, res) {
 
   let salaEncontrada = false;
 
-  for (let sala of salas) {
-    if (sala.nombre === req.body.nombreSala) {
+  for (let i=0;i<salas.length;i++) {
+    if (salas[i].nombre === req.body.nombreSala) {
       let libre = false;
 
       salaEncontrada = true;
 
-      if (sala.clave === req.body.claveSala) {
-        for (let i = 0; i < sala.jugadores.length; i++) {
-          if (sala.jugadores[i] !== null) {
+      if (salas[i].clave === req.body.claveSala) {
+        for (let k=0;k < salas[i].jugadores.length && !libre;k++) {
+          if (salas[i].jugadores[k] === null) {
             libre = true;
 
-            salas.jugadores[i] = req.body.jugadorHash;
+            salas[i].jugadores[k] = req.body.jugadorHash;
           }
         }
 
         if (libre) {
-          dataSend.result = false;
-          dataSend.msg = "Sala llena"
-        } else {
           dataSend.result = true;
-          dataSend.msg = "Has entrado a la sala"
+          dataSend.msg = "Has entrado a la sala";
+        } else {
+          dataSend.result = false;
+          dataSend.msg = "Sala llena";
         }
       } else {
         dataSend.result = false;
@@ -420,5 +457,5 @@ initUsersDb();
 initWsServer();
 
 app.listen(4740, function () {
-  console.log('Aplicación ejemplo, escuchando el puerto 4740!');
+  console.log('TresEnRaya, escuchando en el puerto 4740!');
 });

@@ -1,87 +1,94 @@
 <div class="container-fluid mt-2">
   <div class="row px-2">
-    <div class="col-2 mx-2 pt-2 shadow" id="espacioUsuario">
-      <form id="formLogin">
-        <h4 class="text-center">Iniciar sesión</h4>
-        <div class="form-group">
-          <label for="username">Usuario</label>
-          <input type="text" class="form-control" name="username" placeholder="Nombre de usuario">
-        </div>
-        <div class="form-group">
-          <label for="password">Introduce tu contraseña:</label>
-          <input type="password" class="form-control" name="password" placeholder="Contraseña">
-        </div>
-        <input type="button" value="Enviar" onclick="main.logIn()" class="btn btn-primary btn-block" />
-      </form>
-
-      <div id="tablaUsuario" style="display: none;">
-        <table class="table table-striped">
-          <thead>
-            <tr>
-              <th>Usuario</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td id="usuarioTabla"></td>
-            </tr>
-          </tbody>
-        </table>
-        <table class="table table-striped">
-          <thead>
-            <tr>
-              <th>Máxima Puntuación</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td id="puntuacionTabla"></td>
-            </tr>
-          </tbody>
-        </table>
-        <button class="btn btn-danger btn-block" onclick="main.cerrarSesion()">Cerrar sesión</button>
-      </div>
-    </div>
-    <div class="col-8 mx-2 p-2 shadow">
-      <div id="contSalas">
-        <div class="container-fluid bg-dark rounded p-2 mb-2">
-          <div class="row">
-            <div class="col">
-              <button type="button" class="btn btn-primary" onclick="main.crearSalaManual()">Crear sala</button>
-              <button type="button" class="btn btn-primary ml-2" onclick="main.listarSalas()">Actualizar salas</button>
-            </div>
+    <div class="col-2 p-2" id="espacioUsuario">
+      <div class="p-2 shadow h-100">
+        <form id="formLogin">
+          <h4 class="text-center">Iniciar sesión</h4>
+          <div class="form-group">
+            <label for="username">Usuario</label>
+            <input type="text" class="form-control" name="username" placeholder="Nombre de usuario">
           </div>
-        </div>
-        <div class="cont-tabla">
-          <table id="tableSalas" class="table table-dark table-bordered">
+          <div class="form-group">
+            <label for="password">Introduce tu contraseña:</label>
+            <input type="password" class="form-control" name="password" placeholder="Contraseña">
+          </div>
+          <input type="button" value="Enviar" onclick="main.logIn()" class="btn btn-primary btn-block" />
+        </form>
+
+        <div id="tablaUsuario" style="display: none;">
+          <table class="table table-striped">
             <thead>
               <tr>
-                <th class="text-center">Nombre sala</th>
-                <th class="text-center">Acciones</th>
+                <th>Usuario</th>
               </tr>
             </thead>
             <tbody>
-
+              <tr>
+                <td id="usuarioTabla"></td>
+              </tr>
             </tbody>
+          </table>
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>Máxima Puntuación</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td id="puntuacionTabla"></td>
+              </tr>
+            </tbody>
+          </table>
+          <button class="btn btn-danger btn-block" onclick="main.cerrarSesion()">Cerrar sesión</button>
+        </div>
+      </div>
+    </div>
+    <div class="col-8 p-2">
+      <div class="p-2 shadow h-100">
+        <div id="contSalas">
+          <div class="container-fluid bg-dark rounded p-2 mb-2">
+            <div class="row">
+              <div class="col">
+                <button type="button" class="btn btn-primary" onclick="main.crearSalaManual()">Crear sala</button>
+                <button type="button" class="btn btn-primary ml-2" onclick="main.listarSalas()">Actualizar salas</button>
+              </div>
+            </div>
+          </div>
+          <div class="cont-tabla">
+            <table id="tableSalas" class="table table-dark table-bordered">
+              <thead>
+                <tr>
+                  <th class="text-center">Nombre sala</th>
+                  <th class="text-center">Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+    
+              </tbody>
+            </table>
+          </div>
+        </div>
+    
+        <div id="contJuego" style="display: none">
+          <div class="container-fluid mb-2">
+            <div class="row">
+              <div class="col text-center jugador-display mx-2">Jugador 1</div>
+              <div class="col text-center jugador-display mx-2">Jugador 2</div>
+            </div>
+          </div>
+    
+          <table id="tablero">
           </table>
         </div>
       </div>
-
-      <div id="contJuego" style="display: none">
-        <div class="container-fluid">
-          <div class="row">
-            <div class="col text-center">Jugador 1</div>
-            <div class="col text-center">Jugador 2</div>
-          </div>
-        </div>
-
-        <table id="tablero">
-        </table>
-      </div>
     </div>
 
-    <div class="col-2 p-0 shadow" id="usuariosList">
-      <ul></ul>
+    <div class="col-2 p-2" id="usuariosList">
+      <div class="p-2 shadow h-100">
+        <h4 class="text-center">Jugadores online</h4>
+        <ul></ul>
+      </div>
     </div>
   </div>
 </div>
