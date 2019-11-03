@@ -1,13 +1,24 @@
 const express = require('express');
+const hbs = require('express-handlebars');
 const app = express();
 const bodyParser = require('body-parser');
 const WebSocket = require('ws');
 const sqlite3 = require('sqlite3').verbose();
+const tools = require('./tools.js');
 
 var wsServer = null;
 
 var salas = [];
 var clientes = [];
+
+app.set('view engine', 'hbs');
+app.engine( 'hbs', hbs( {
+  extname: 'hbs',
+  defaultView: 'index',
+  defaultLayout: 'main',
+  layoutsDir: __dirname + '/views/layouts/',
+  partialsDir: __dirname + '/views/partials/'
+}));
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.json());
@@ -19,6 +30,20 @@ app.use((req, res, next) => {
   res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
   next();
 });
+
+function Cliente(username, hash, maxScore) {
+  this.username = username;
+  this.hash = hash;
+  this.maxScore = maxScore;
+}
+
+function Sala(nombreSala, claveSala, jugador) {
+  this.nombre = nombreSala;
+  this.clave = claveSala;
+  this.creador = jugador;
+  this.jugadores = [null, null];
+  this.tablero = [];
+}
 
 function initUsersDb() {
   let db = new sqlite3.Database('./db/usuarios.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
@@ -78,47 +103,73 @@ function initWsServer() {
     ws.on('message', message => {
       let msg = JSON.parse(message);
 
-      if (msg.type) {
-        if (msg.type === "userData") {
-          let cliente = {
-            username: msg.data.username,
-            ip: req.connection.remoteAddress,
-            ws: ws
-          };
+      if(msg.type === "registrarJugador"){
+        let jugador = null;
 
-          clientes.push(cliente);
-
-          console.log("New user: " + cliente.username);
-
-          let dataSend = {
-            type: "clients",
-            data: clientes
-          };
-
-          ws.send(JSON.stringify(dataSend));
-        }else if(msg.type === "getTablero"){
-          let dataSend = {
-            type: "tablero",
-            data: {
-              tablero: []
-            }
-          };
-          
-          for(let sala of salas){
-            if(sala.nombre === msg.data.nombreSala){
-              dataSend.data.tablero = sala.tablero;
-            }
+        for(let jugadorAux of clientes){
+          if(jugadorAux.hash === msg.data.jugador){
+            jugador = jugadorAux;
           }
+        }
 
-          ws.send(JSON.stringify(dataSend));
-        }else if(msg.type === "celdaClick"){
-          let position = msg.data.position;
 
-          for(let sala of salas){
-            if(sala.nombre === msg.data.nombreSala){
-              sala.tablero[position.y][position.x].value = msg.data.jugador.ficha;
-            }
+      }else if (msg.type === "getTablero") {
+        let dataSend = {
+          type: "tablero",
+          data: {
+            tablero: []
           }
+        };
+
+        for (let sala of salas) {
+          if (sala.nombre === msg.data.nombreSala) {
+            dataSend.data.tablero = sala.tablero;
+          }
+        }
+
+        ws.send(JSON.stringify(dataSend));
+      } else if (msg.type === "celdaClick") {
+        let position = msg.data.position;
+        let jugador = null;
+
+        for (let cliente of clientes) {
+          if (cliente.hash === msg.data.jugador) {
+            jugador = cliente;
+          }
+        }
+
+        for (let sala of salas) {
+          if (sala.nombre === msg.data.nombreSala) {
+            let ficha = "none";
+
+            for (let j = 0; j < sala.jugadores.lenght; j++) {
+              if (sala.jugadores[j].hash === msg.data.jugador) {
+                if (j === 0) {
+                  ficha = "cruz";
+                } else {
+                  ficha = "circulo";
+                }
+              }
+            }
+
+            sala.tablero[position.y][position.x].value = ficha;
+          }
+        }
+      } else if (msg.type === "infoSala") {
+        let sala = null;
+        let dataSend = {
+          nombreSala: "",
+          jugadores: []
+        };
+
+        for (let salaAux of salas) {
+          if (salaAux.nombre === msg.data.nombreSala) {
+            sala = salaAux;
+          }
+        }
+
+        if (sala !== null) {
+
         }
       }
     });
@@ -126,7 +177,7 @@ function initWsServer() {
 }
 
 app.get('/', function (req, res) {
-  res.sendFile('./views/index.html', { root: __dirname });
+  res.render('index', {layout: 'main'});
 });
 
 app.post('/getView', function (req, res) {
@@ -140,46 +191,82 @@ app.post('/login', function (req, res) {
     username: "",
     loginState: false,
     maxScore: 0,
-    hash: "prueba"
+    hash: ""
   };
 
-  let db = new sqlite3.Database('./db/usuarios.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
-    if (err) {
-      console.error(err.message);
-    }
-  });
+  if(req.body.hash){
+    let usuarioRecuperado = null;
 
-  let queryLogin = `
-    SELECT * FROM usuarios WHERE
-    username = ? AND passwd = ?
-  `.trim();
-
-  let username = req.body.username;
-  let passwd = req.body.password;
-
-  db.get(queryLogin, [username, passwd], function (err, row) {
-    if (err) {
-      console.log(err);
+    for(let cliente of clientes){
+      if(cliente.hash === req.body.hash){
+        usuarioRecuperado = cliente;
+      }
     }
 
-    if (row) {
+    if(usuarioRecuperado !== null){
       dataSend.loginState = true;
-      dataSend.maxScore = row.maxScore;
-      dataSend.username = row.username;
-    } else {
+      dataSend.username = usuarioRecuperado.username;
+      dataSend.maxScore = usuarioRecuperado.maxScore;
+      dataSend.hash = usuarioRecuperado.hash;
+    }else{
       dataSend.loginState = false;
     }
 
-    console.log(dataSend);
-
     res.send(JSON.stringify(dataSend));
-
-    db.close((err) => {
+  }else{
+    let db = new sqlite3.Database('./db/usuarios.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
       if (err) {
         console.error(err.message);
       }
     });
-  });
+  
+    let queryLogin = `
+      SELECT * FROM usuarios WHERE
+      username = ? AND passwd = ?
+    `.trim();
+  
+    let username = req.body.username;
+    let passwd = req.body.password;
+  
+    db.get(queryLogin, [username, passwd], function (err, row) {
+      if (err) {
+        console.log(err);
+      }
+  
+      if (row) {
+        let hash = tools.randomString(12);
+  
+        dataSend.loginState = true;
+        dataSend.maxScore = row.maxScore;
+        dataSend.username = row.username;
+        dataSend.hash = hash;
+  
+        let clienteExistente = false;
+  
+        for (let cliente of clientes) {
+          if (cliente.id === row.id) {
+            clienteExistente = true;
+  
+            cliente.hash = hash;
+          }
+        }
+  
+        if (!clienteExistente) {
+          clientes.push(new Cliente(row.id, row.username, hash, row.maxScore));
+        }
+      } else {
+        dataSend.loginState = false;
+      }
+  
+      res.send(JSON.stringify(dataSend));
+  
+      db.close((err) => {
+        if (err) {
+          console.error(err.message);
+        }
+      });
+    });
+  }
 });
 
 app.post('/signup', function (req, res) {
@@ -239,50 +326,47 @@ app.post('/signup', function (req, res) {
   });
 });
 
-app.post("/crearSala", function(req, res){
+app.post("/crearSala", function (req, res) {
   let dataSend = {
     type: "crearSala",
     result: false,
     msg: ""
   };
 
-  try{
+  try {
     let existe = false;
 
-    for(let sala of salas){
-      if(sala.nombre === req.body.nombreSala){
+    for (let sala of salas) {
+      if (sala.nombre === req.body.nombreSala) {
         existe = true;
       }
     }
 
-    if(!existe){
-      let sala = {
-        nombre: req.body.nombreSala,
-        clave: req.body.claveSala,
-        creador: req.body.jugador,
-        jugadores: [null, null],
-        tablero: []
-      };
-    
+    if (!existe) {
+      let sala = new Sala(req.body.nombreSala,
+        req.body.claveSala, req.body.jugador);
+
       generarTablero(sala);
-    
+
       salas.push(sala);
-      
+
       dataSend.result = true;
       dataSend.msg = "Sala [" + sala.nombre + "] creada!";
-    }else{
+    } else {
       dataSend.result = false;
       dataSend.msg = "La sala [" + sala.nombre + "] ya existe, no creada";
     }
-  }catch(err){
+  } catch (err) {
     dataSend.result = false;
     dataSend.msg = "Sala no creada";
+
+    console.error(err);
   }
-  
+
   res.send(JSON.stringify(dataSend));
 });
 
-app.post("/entrarSala", function(req, res){
+app.post("/entrarSala", function (req, res) {
   let dataSend = {
     type: "entrarSala",
     result: false,
@@ -302,7 +386,7 @@ app.post("/entrarSala", function(req, res){
           if (sala.jugadores[i] !== null) {
             libre = true;
 
-            salas.jugadores = req.body.jugador;
+            salas.jugadores[i] = req.body.jugadorHash;
           }
         }
 
@@ -328,9 +412,7 @@ app.post("/entrarSala", function(req, res){
   res.send(JSON.stringify(dataSend));
 });
 
-app.post("/setMaxScore")
-
-app.get("/listSalas", function(req, res){
+app.get("/listSalas", function (req, res) {
   res.send(JSON.stringify(salas));
 });
 

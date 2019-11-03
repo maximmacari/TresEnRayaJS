@@ -5,22 +5,32 @@ class Main{
     this.contJuego = document.getElementById("contJuego");
     this.tabla = document.getElementById("tablaUsuario")
 
-    this.jugador = {
-      username: "none",
-      hash: "",
-      maxScore: 0,
-      score: 0
-    };  
+    this.jugadorHash = null;  
     this.sala = null;
   }
   
   comprobacionUsuario(){
-    if(localStorage.getItem("username") !== null){
-      this.displayTabla()
-      console.log("Estamos en el if")
+    if(localStorage.getItem("jugadorHash") !== null){
+      let dataSend = {
+        hash: localStorage.getItem("jugadorHash")
+      };
+      
+      tools.httpPost("/login", JSON.stringify(dataSend), function(msg){
+        let resp = JSON.parse(msg);
+
+        if(resp.loginState){
+          tools.showModal("Iniciar sesión", `Has iniciado sesión, bienvenido ${resp.username}`);
+          
+          main.jugadorHash = resp.hash;
+
+          main.displayTabla();
+          main.listarSalas();
+        }
+      }, function(err){
+        console.error(err);
+      });
     }else{
-      console.log("Estamos en el else")
-      this.tabla.style.display = "none"
+      this.tabla.style.display = "none";
     }
   }
 
@@ -28,18 +38,16 @@ class Main{
     let dataSend = {
       username: this.formLogIn.elements.username.value,
       password: this.formLogIn.elements.password.value
-    }
+    };
 
     tools.httpPost("/login", JSON.stringify(dataSend), (msg) => {
       let resp = JSON.parse(msg);
-      //
+
       if(resp.loginState){
         tools.showModal("Iniciar sesión", `Has iniciado sesión, bienvenido ${dataSend.username}`);
         
-        main.jugador.username = resp.username;
-        main.jugador.maxScore = resp.maxScore;
-        main.jugador.hash = resp.hash;
-        sesionUsuario.guardarUsuario(dataSend, main.jugador.maxScore)
+        main.jugadorHash = resp.hash;
+        sesionUsuario.guardarUsuario(main.jugadorHash);
         main.displayTabla();
         main.listarSalas();
       }else{
@@ -49,26 +57,24 @@ class Main{
         }else{
 
         }
-
       }
     }, (err) => {
       console.error(err);
     });
   }
 
-
   signUp(){
 
   }
-  cerrarSesion(){
-    sesionUsuario.borrarSesion()
-    this.dispalyLogin()
 
+  cerrarSesion(){
+    sesionUsuario.borrarSesion();
+    this.displayLogin();
   }
 
   crearSala(nombreSala, claveSala){
     let dataSend = {
-      jugador: this.jugador,
+      jugador: this.jugadorHash,
       nombreSala: nombreSala,
       claveSala: claveSala
     };
@@ -87,7 +93,7 @@ class Main{
   entrarSala(nombreSala, claveSala){
     if(this.sala === null){
       let dataSend = {
-        jugador: this.jugador,
+        jugador: this.jugadorHash,
         nombreSala: nombreSala,
         claveSala: claveSala
       };
@@ -163,16 +169,15 @@ class Main{
     this.contJuego.style.display = "none";
     this.contSalas.style.display = "block";
   }
+
   displayTabla(){
     this.tabla.style.display = "block"
-    usuarioTabla.innerHTML = localStorage.getItem("username")
-    puntuacionTabla.innerHTML = localStorage.getItem("maxScore")
+    usuarioTabla.innerHTML = localStorage.getItem("jugadorHash")
     this.formLogIn.style.display = "none" 
   }
-  dispalyLogin(){
-    this.tabla.style.display = "none"
-    this.formLogIn.style.display = "block" 
-    console.log("displayLogin")
-  }
 
+  displayLogin(){
+    this.tabla.style.display = "none"
+    this.formLogIn.style.display = "block"
+  }
 }

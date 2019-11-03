@@ -1,0 +1,49 @@
+<nav class="navbar navbar-expand-sm navbar-dark bg-dark justify-content-center">
+  <div class="navbar-brand logo">
+    <a href="./views/index.html">
+      <img src="./res/img/tic-tac-toe.svg" alt="Logotipo" width="50px" height="30px"
+        onerror="this.onerror=null; this.src='../res/img/tic-tac-toe.png'" />
+      <img src="./res/img/logo.png" width="140px" height="30px" alt="Logotipo" />
+    </a>
+  </div>
+  <ul class="nav nav-pills" role="tablist">
+    <li class="nav-item">
+      <a class="nav-link text-light active" id="juego-tab" data-toggle="tab" href="#tabJuego" role="tab" aria-controls="tabJuego"
+        aria-selected="true">Juego</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link text-light" id="descripcionJuego-tab" data-toggle="tab" href="#tabDescripcionJuego" role="tab"
+        aria-controls="tabDescripcionJuego" aria-selected="true">Descripción del Juego</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link text-light" id="autores-tab" data-toggle="tab" href="#tabAutores" role="tab" aria-controls="tabAutores"
+        aria-selected="true">Autores</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link text-light" id="referencias-tab" data-toggle="tab" href="#tabReferencias" role="tab" aria-controls="tabReferencias"
+        aria-selected="true">Referencias</a>
+    </li>
+  </ul>
+</nav>
+<main>
+  <div class="tab-content" id="tabContenedor">
+    <div class="tab-pane fade show active" id="tabJuego" role="tabpanel">
+      {{> juego}}
+    </div>
+    <div class="tab-pane fade" id="tabDescripcionJuego" role="tabpanel">
+      {{> descripcion_juego}}
+    </div>
+    <div class="tab-pane fade" id="tabAutores" role="tabpanel">
+      {{> autores}}
+    </div>
+    <div class="tab-pane fade" id="tabReferencias" role="tabpanel">
+      {{> referencias}}
+    </div>
+  </div>
+</main>
+
+<div class="modal fade" role="dialog" id="modalTemplate"></div>
+
+<footer>
+
+</footer>

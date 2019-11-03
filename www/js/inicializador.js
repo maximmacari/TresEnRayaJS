@@ -8,5 +8,6 @@ window.addEventListener("DOMContentLoaded", () => {
   sesionUsuario = new SesionUsuario();
   main = new Main();
   juego = new Juego();
+  
   main.comprobacionUsuario();
 });

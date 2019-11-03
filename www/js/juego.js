@@ -12,22 +12,19 @@ class Juego{
     this.casillas = [];
   }
 
-  // canvasCalcOffset(){
-  //   let bounds = this.canvas.getBoundingClientRect();
-  //   this.offsetX = bounds.left;
-  //   this.offsetY = bounds.top;  
-  // }
-
   celdaClick(position){
     let dataSend = {
       type: "celdaClick",
       data:{
         nombreSala: main.sala,
-        position: position
+        position: position,
+        jugador: main.jugadorHash
       }
     };
 
     this.ws.send(JSON.stringify(dataSend));
+
+    setTimeout(juego.requestTablero, 100);
   }
 
   generarTablero(sala){
@@ -125,43 +122,39 @@ class Juego{
     }
   }
 
+  requestTablero(){
+    let dataSend = {
+      type: "getTablero",
+      data: {
+        nombreSala: main.sala
+      }
+    };
+
+    juego.ws.send(JSON.stringify(dataSend));
+  }
+
   init(){
     main.displayJuego();
-    
+
     window.WebSocket = window.WebSocket || window.MozWebSocket;
 
-    this.ws = new WebSocket('ws://192.168.3.146:4741');
+    this.ws = new WebSocket('ws://localhost:4741');
 
     this.ws.onopen = function () {
-      console.log("OPEN");
-      let userData = {
-        username: main.jugador.username
-      };
-
-      let dataSend = {
-        type: "userData",
-        data: userData
-      };
-
-      juego.ws.send(JSON.stringify(dataSend));
+      
 
       juego.intervalUpdate = setInterval(function(){
-        let dataSend = {
-          type: "getTablero",
-          data: {
-            nombreSala: main.sala
-          }
-        };
-
-        juego.ws.send(JSON.stringify(dataSend));
+        juego.requestTablero();
       }, 1000);
     };
 
     this.ws.onclose = function(){
+      clearInterval(juego.intervalUpdate);
       console.log("Conexión cerrada");
     }
 
     this.ws.onerror = function (error) {
+      clearInterval(juego.intervalUpdate);
       console.error("ERROR WS: " + error);
     };
 
@@ -187,6 +180,9 @@ class Juego{
         }else if(msg.type === "tablero"){
           juego.casillas = msg.data.tablero;
           juego.pintarCasillas();
+
+          console.log("TABLERO");
+          
         }
       } catch (e) {
         console.error(e);
@@ -195,9 +191,5 @@ class Juego{
       }
       // handle incoming message
     };
-  }
-
-  update(){
-
   }
 }
