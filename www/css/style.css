@@ -114,3 +114,8 @@ footer {
   transform: scale(1.1, 1.1);
   transition: all 0.8s ease-in-out;
 }
+
+.container mt-2{
+  margin-top: 30px;
+}
+
