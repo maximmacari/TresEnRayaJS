@@ -6,12 +6,18 @@
   "scripts": {
     "start": "node ."
   },
-  "author": "Gabriel Revilla",
-  "license": "ISC",
+  "bin": "index.js",
+  "pkg": {
+    "scripts": "*.js",
+    "assets": ["views/**/*", "www/**/*"]
+  },
+  "author": "Grupo 3",
+  "license": "Private",
   "dependencies": {
     "body-parser": "^1.19.0",
     "express": "^4.17.1",
     "express-handlebars": "^3.1.0",
+    "pkg": "^4.4.0",
     "sqlite3": "^4.1.0",
     "websocket": "^1.0.30",
     "ws": "^7.1.2"
