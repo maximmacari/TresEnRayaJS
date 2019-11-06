@@ -9,8 +9,7 @@ class Juego {
     this.usuariosList = document.getElementById("usuariosList");
     this.tablero = document.getElementById("tablero");
 
-    this.wsHost = "localhost:4741";
-
+    
     this.casillas = [];
   }
 
