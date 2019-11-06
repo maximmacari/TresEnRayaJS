@@ -115,7 +115,7 @@ function generarTablero(sala) {
           x: k,
           y: i
         },
-        value: "none"
+        value: "none" // "circulo" | "cruz" | "none"
       };
 
       filaCasillas.push(casilla);
@@ -183,6 +183,17 @@ function initWsServer() {
           }
 
           sala.tablero[position.y][position.x].value = ficha;
+
+          /*
+          if(sala.tablero[0][0].value === "cruz" && sala.tablero[0][1].value === "cruz" 
+            && sala.tablero[0][2].value === "cruz"){
+              
+          }
+          for (let i = 0; i < sala.tablero.length; i++){
+            
+          }
+          */
+
 
           for(let jugadorAux of sala.jugadores){
             if(jugadorAux !== null){
