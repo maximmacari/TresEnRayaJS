@@ -114,3 +114,19 @@ footer {
   transform: scale(1.1, 1.1);
   transition: all 0.8s ease-in-out;
 }
+
+.container mt-2{
+  margin-top: 30px;
+}
+
+
+/*Referencias*/
+.contenedor-referencias {
+  border: 1px solid black;
+  padding: 20px;
+  max-width: 800px;
+  margin-left:  auto;
+  margin-right: auto;
+  margin-top: 50px;
+}
+
