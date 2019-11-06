@@ -9,6 +9,8 @@ class Juego {
     this.usuariosList = document.getElementById("usuariosList");
     this.tablero = document.getElementById("tablero");
 
+    this.wsHost = "localhost:4741";
+
     this.casillas = [];
   }
 
@@ -23,6 +25,8 @@ class Juego {
     };
 
     this.ws.send(JSON.stringify(dataSend));
+
+    new Audio("./res/sound/inicio_juego_sound.wav").play();
   }
 
   generarTablero(sala) {
@@ -172,7 +176,7 @@ class Juego {
 
     window.WebSocket = window.WebSocket || window.MozWebSocket;
 
-    this.ws = new WebSocket('ws://192.168.3.148:4741');
+    this.ws = new WebSocket('ws://' + juego.wsHost);
 
     this.ws.onopen = function () {
       let dataSend = {
