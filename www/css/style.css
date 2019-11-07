@@ -100,6 +100,11 @@ footer {
   margin-top: 30px;
 }
 
+.figure{
+  max-width: auto;
+  margin-left: 1em;
+}
+
 /*Autores*/
 
 .autor_card{
@@ -129,4 +134,5 @@ footer {
   margin-right: auto;
   margin-top: 50px;
 }
+
 
