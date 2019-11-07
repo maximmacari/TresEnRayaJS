@@ -45,6 +45,7 @@ function Sala(nombreSala, claveSala, jugador) {
   this.creador = jugador;
   this.jugadores = [null, null];
   this.tablero = [];
+  this.turno = 0;
 }
 
 function enviarTablero(ws, nombreSala){
@@ -174,10 +175,12 @@ function initWsServer() {
 
           for (let j=0; j<sala.jugadores.length; j++) {
             if (sala.jugadores[j] === msg.data.jugadorHash) {
-              if (j === 0) {
-                ficha = "cruz";
-              } else if(j === 1) {
-                ficha = "circulo";
+              if(sala.turno === j){
+                if (j === 0) {
+                  ficha = "cruz";
+                } else if(j === 1) {
+                  ficha = "circulo";
+                }
               }
             }
           }

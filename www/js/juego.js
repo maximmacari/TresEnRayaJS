@@ -3,12 +3,13 @@ class Juego {
     this.offsetX = 0;
     this.offsetY = 0;
 
+    this.wsHost = "localhost:4741";
+
     this.ws = null;
     this.isRunning = true;
 
     this.usuariosList = document.getElementById("usuariosList");
     this.tablero = document.getElementById("tablero");
-
 
     this.casillas = [];
   }
@@ -57,11 +58,6 @@ class Juego {
     /*
     valores = "cruz", "circulo" , "none"
     */
-    for () {
-      for () {
-
-      }
-    }
   }
 
   actualizarCasillas() {
