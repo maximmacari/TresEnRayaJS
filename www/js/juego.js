@@ -9,7 +9,7 @@ class Juego {
     this.usuariosList = document.getElementById("usuariosList");
     this.tablero = document.getElementById("tablero");
 
-    
+
     this.casillas = [];
   }
 
@@ -25,7 +25,7 @@ class Juego {
 
     this.ws.send(JSON.stringify(dataSend));
 
-    new Audio("./res/sound/inicio_juego_sound.wav").play();
+    new Audio("./res/sound/pulsar.wav").play();
   }
 
   generarTablero(sala) {
@@ -49,6 +49,18 @@ class Juego {
       }
 
       sala.tablero.push(filaCasillas);
+    }
+  }
+
+
+  comprobarGanador() {
+    /*
+    valores = "cruz", "circulo" , "none"
+    */
+    for () {
+      for () {
+
+      }
     }
   }
 
