@@ -172,30 +172,27 @@ function initWsServer() {
 
         if(sala !== null){
           let ficha = "none";
+          let jugador = null;
+          let jugadorId = null;
 
           for (let j=0; j<sala.jugadores.length; j++) {
             if (sala.jugadores[j] === msg.data.jugadorHash) {
-              if(sala.turno === j){
-                if (j === 0) {
-                  ficha = "cruz";
-                } else if(j === 1) {
-                  ficha = "circulo";
-                }
-              }
+              jugador = sala.jugadores[j];
+              jugadorId = j;
             }
           }
 
-          sala.tablero[position.y][position.x].value = ficha;
+          if(sala.turno === jugadorId){
+            if (jugadorId === 0) {
+              ficha = "cruz";
+              sala.turno = 1;
+            } else if(jugadorId === 1) {
+              ficha = "circulo";
+              sala.turno = 0;
+            }
 
-          /*
-          if(sala.tablero[0][0].value === "cruz" && sala.tablero[0][1].value === "cruz" 
-            && sala.tablero[0][2].value === "cruz"){
-              
+            sala.tablero[position.y][position.x].value = ficha;
           }
-          for (let i = 0; i < sala.tablero.length; i++){
-            
-          }
-          */
 
 
           for(let jugadorAux of sala.jugadores){

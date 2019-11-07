@@ -3,7 +3,7 @@ class Juego {
     this.offsetX = 0;
     this.offsetY = 0;
 
-    this.wsHost = "localhost:4741";
+    this.wsHost = "192.168.3.148:4741";
 
     this.ws = null;
     this.isRunning = true;
