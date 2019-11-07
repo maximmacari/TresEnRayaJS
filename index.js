@@ -12,7 +12,7 @@ var salas = [];
 var clientes = [];
 
 app.set('view engine', 'hbs');
-app.engine( 'hbs', hbs( {
+app.engine('hbs', hbs({
   extname: 'hbs',
   defaultView: 'index',
   defaultLayout: 'main',
@@ -48,7 +48,7 @@ function Sala(nombreSala, claveSala, jugador) {
   this.turno = 0;
 }
 
-function enviarTablero(ws, nombreSala){
+function enviarTablero(ws, nombreSala) {
   let dataSend = {
     type: "tablero",
     data: {
@@ -126,6 +126,21 @@ function generarTablero(sala) {
   }
 }
 
+function comprobarGanador(tablero, jugadorID) {
+  //tablero[0][0].value -> "cruz", "circulo", "none" [y, x]
+  if (mapa[0][0].value == mapa[0][1] && mapa[0][1].value == mapa[0][2] && mapa[0][0].value != 0) return mapa[0][0];
+  if (mapa[1][0].value == mapa[1][1] && mapa[1][1].value == mapa[1][2] && mapa[1][0].value != 0) return mapa[1][0];
+  if (mapa[2][0].value == mapa[2][1] && mapa[2][1].value == mapa[2][2] && mapa[2][0].value != 0) return mapa[2][0];
+  //Las líneas verticales
+  if (mapa[0][0].value == mapa[1][0] && mapa[1][0].value == mapa[2][0] && mapa[0][0].value != 0) return mapa[0][0];
+  if (mapa[0][1].value == mapa[1][1] && mapa[1][1].value == mapa[2][1] && mapa[0][1].value != 0) return mapa[0][1];
+  if (mapa[0][2].value == mapa[1][2] && mapa[1][2].value == mapa[2][2] && mapa[0][2].value != 0) return mapa[0][2];
+  //Las diagonales
+  if (mapa[0][0].value == mapa[1][1] && mapa[1][1].value == mapa[2][2] && mapa[0][0].value != 0) return mapa[0][0];
+  if (mapa[2][0].value == mapa[1][1] && mapa[1][1].value == mapa[0][2] && mapa[2][0].value != 0) return mapa[2][0];
+
+}
+
 function initWsServer() {
   wsServer = new WebSocket.Server({ port: 4741 });
 
@@ -134,7 +149,7 @@ function initWsServer() {
     ws.on('message', message => {
       let msg = JSON.parse(message);
 
-      if(msg.type === "registrarJugador"){
+      if (msg.type === "registrarJugador") {
         let dataSend = {
           type: "registrarJugador",
           data: {
@@ -144,10 +159,10 @@ function initWsServer() {
         let registrado = false;
 
         console.log(clientes, msg.data.jugadorHash);
-        
 
-        for(let i=0; i<clientes.length; i++){
-          if(clientes[i].hash === msg.data.jugadorHash){
+
+        for (let i = 0; i < clientes.length; i++) {
+          if (clientes[i].hash === msg.data.jugadorHash) {
             clientes[i].ws = ws;
 
             registrado = true;
@@ -157,7 +172,7 @@ function initWsServer() {
         dataSend.data.result = registrado;
 
         ws.send(JSON.stringify(dataSend));
-      }else if (msg.type === "getTablero") {
+      } else if (msg.type === "getTablero") {
 
         enviarTablero(ws, msg.data.nombreSala);
       } else if (msg.type === "celdaClick") {
@@ -170,23 +185,23 @@ function initWsServer() {
           }
         }
 
-        if(sala !== null){
+        if (sala !== null) {
           let ficha = "none";
           let jugador = null;
           let jugadorId = null;
 
-          for (let j=0; j<sala.jugadores.length; j++) {
+          for (let j = 0; j < sala.jugadores.length; j++) {
             if (sala.jugadores[j] === msg.data.jugadorHash) {
               jugador = sala.jugadores[j];
               jugadorId = j;
             }
           }
 
-          if(sala.turno === jugadorId){
+          if (sala.turno === jugadorId) {
             if (jugadorId === 0) {
               ficha = "cruz";
               sala.turno = 1;
-            } else if(jugadorId === 1) {
+            } else if (jugadorId === 1) {
               ficha = "circulo";
               sala.turno = 0;
             }
@@ -194,12 +209,13 @@ function initWsServer() {
             sala.tablero[position.y][position.x].value = ficha;
           }
 
+          comprobarGanador(sala.tablero, jugadorId);
 
-          for(let jugadorAux of sala.jugadores){
-            if(jugadorAux !== null){
+          for (let jugadorAux of sala.jugadores) {
+            if (jugadorAux !== null) {
               let jugador = searchCliente(jugadorAux);
 
-              if(jugador !== null){
+              if (jugador !== null) {
                 enviarTablero(jugador.ws, sala.nombre);
               }
             }
@@ -227,7 +243,7 @@ function initWsServer() {
 }
 
 app.get('/', function (req, res) {
-  res.render('index', {layout: 'main'});
+  res.render('index', { layout: 'main' });
 });
 
 app.post('/getView', function (req, res) {
@@ -242,72 +258,72 @@ app.post('/login', function (req, res) {
     hash: ""
   };
 
-  if(req.body.hash){
+  if (req.body.hash) {
     let usuarioRecuperado = null;
 
-    for(let cliente of clientes){
-      if(cliente.hash === req.body.hash){
+    for (let cliente of clientes) {
+      if (cliente.hash === req.body.hash) {
         usuarioRecuperado = cliente;
       }
     }
 
-    if(usuarioRecuperado !== null){
+    if (usuarioRecuperado !== null) {
       dataSend.loginState = true;
       dataSend.username = usuarioRecuperado.username;
       dataSend.maxScore = usuarioRecuperado.maxScore;
       dataSend.hash = usuarioRecuperado.hash;
-    }else{
+    } else {
       dataSend.loginState = false;
     }
 
     res.send(JSON.stringify(dataSend));
-  }else{
+  } else {
     let db = new sqlite3.Database('./db/usuarios.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
       if (err) {
         console.error(err.message);
       }
     });
-  
+
     let queryLogin = `
       SELECT * FROM usuarios WHERE
       username = ? AND passwd = ?
     `.trim();
-  
+
     let username = req.body.username;
     let passwd = req.body.password;
-  
+
     db.get(queryLogin, [username, passwd], function (err, row) {
       if (err) {
         console.log(err);
       }
-  
+
       if (row) {
         let hash = tools.randomString(12);
-  
+
         dataSend.loginState = true;
         dataSend.maxScore = row.maxScore;
         dataSend.username = row.username;
         dataSend.hash = hash;
-  
+
         let clienteExistente = false;
-  
+
         for (let cliente of clientes) {
           if (cliente.id === row.id) {
             clienteExistente = true;
-  
+
             cliente.hash = hash;
           }
         }
-  
+
         if (!clienteExistente) {
           clientes.push(new Cliente(row.id, row.username, hash, row.maxScore));
         }
       } else {
         dataSend.loginState = false;
       }
-  
+
       res.send(JSON.stringify(dataSend));
-  
+
       db.close((err) => {
         if (err) {
           console.error(err.message);
@@ -423,14 +439,14 @@ app.post("/entrarSala", function (req, res) {
 
   let salaEncontrada = false;
 
-  for (let i=0;i<salas.length;i++) {
+  for (let i = 0; i < salas.length; i++) {
     if (salas[i].nombre === req.body.nombreSala) {
       let libre = false;
 
       salaEncontrada = true;
 
       if (salas[i].clave === req.body.claveSala) {
-        for (let k=0;k < salas[i].jugadores.length && !libre;k++) {
+        for (let k = 0; k < salas[i].jugadores.length && !libre; k++) {
           if (salas[i].jugadores[k] === null) {
             libre = true;
 
