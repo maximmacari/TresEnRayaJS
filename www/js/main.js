@@ -1,40 +1,42 @@
-class Main{
-  constructor(){
+class Main {
+  constructor() {
     this.formLogIn = document.getElementById("formLogin");
     this.contSalas = document.getElementById("contSalas");
     this.contJuego = document.getElementById("contJuego");
     this.tabla = document.getElementById("tablaUsuario")
 
-    this.jugadorHash = null;  
+    this.jugadorHash = null;
     this.sala = null;
   }
-  
-  comprobacionUsuario(){
-    if(localStorage.getItem("jugadorHash") !== null){
+
+
+
+  comprobacionUsuario() {
+    if (localStorage.getItem("jugadorHash") !== null) {
       let dataSend = {
         hash: localStorage.getItem("jugadorHash")
       };
-      
-      tools.httpPost("/login", JSON.stringify(dataSend), function(msg){
+
+      tools.httpPost("/login", JSON.stringify(dataSend), function (msg) {
         let resp = JSON.parse(msg);
 
-        if(resp.loginState){
+        if (resp.loginState) {
           tools.showModal("Iniciar sesión", `Has iniciado sesión, bienvenido ${resp.username}`);
-          
+
           main.jugadorHash = resp.hash;
 
           main.displayTabla();
           main.listarSalas();
         }
-      }, function(err){
+      }, function (err) {
         console.error(err);
       });
-    }else{
+    } else {
       this.tabla.style.display = "none";
     }
   }
 
-  logIn(){
+  logIn() {
     let dataSend = {
       username: this.formLogIn.elements.username.value,
       password: this.formLogIn.elements.password.value
@@ -43,18 +45,19 @@ class Main{
     tools.httpPost("/login", JSON.stringify(dataSend), (msg) => {
       let resp = JSON.parse(msg);
 
-      if(resp.loginState){
+      if (resp.loginState) {
         tools.showModal("Iniciar sesión", `Has iniciado sesión, bienvenido ${dataSend.username}`);
-        
+
         main.jugadorHash = resp.hash;
         sesionUsuario.guardarUsuario(main.jugadorHash);
         main.displayTabla();
         main.listarSalas();
-      }else{
+
+      } else {
         tools.showModal("Iniciar sesión", "Usuario o contraseña incorrectos");
-        if(confirm("¿Deseas registrarte con estos datos?")){
+        if (confirm("¿Deseas registrarte con estos datos?")) {
           signUp(usuario, password)
-        }else{
+        } else {
 
         }
       }
@@ -63,63 +66,63 @@ class Main{
     });
   }
 
-  signUp(){
+  signUp() {
 
   }
 
-  cerrarSesion(){
+  cerrarSesion() {
     sesionUsuario.borrarSesion();
     this.displayLogin();
   }
 
-  crearSala(nombreSala, claveSala){
+  crearSala(nombreSala, claveSala) {
     let dataSend = {
       jugador: this.jugadorHash,
       nombreSala: nombreSala,
       claveSala: claveSala
     };
 
-    tools.httpPost("/crearSala", JSON.stringify(dataSend), function(msg){
+    tools.httpPost("/crearSala", JSON.stringify(dataSend), function (msg) {
       let resp = JSON.parse(msg);
-      
+
       tools.showModal("Crear sala", resp.msg);
 
       main.listarSalas();
-    }, function(err){
+    }, function (err) {
       console.error(err);
     });
   }
 
-  entrarSala(nombreSala, claveSala){
-    if(this.sala === null){
+  entrarSala(nombreSala, claveSala) {
+    if (this.sala === null) {
       let dataSend = {
         jugadorHash: this.jugadorHash,
         nombreSala: nombreSala,
         claveSala: claveSala
       };
 
-      tools.httpPost("/entrarSala", JSON.stringify(dataSend), function(msg){
+      tools.httpPost("/entrarSala", JSON.stringify(dataSend), function (msg) {
         let resp = JSON.parse(msg);
 
-        if(resp.result){
+        if (resp.result) {
           main.sala = nombreSala;
 
           juego.init();
 
           tools.showModal("Entrar en sala", resp.msg);
-        }else{
+        } else {
           tools.showModal("Entrar en sala", resp.msg);
         }
-      }, function(err){
+      }, function (err) {
         console.error(err);
       });
-    }else{
+    } else {
       tools.showModal("Info", "Ya estás en una sala!");
     }
   }
 
-  listarSalas(){
-    tools.httpGet("/listSalas", function(msg){
+  listarSalas() {
+    tools.httpGet("/listSalas", function (msg) {
       let resp = JSON.parse(msg);
 
       let tableSalas = document.getElementById("tableSalas")
@@ -127,7 +130,7 @@ class Main{
 
       tableSalas.innerHTML = "";
 
-      for(let sala of resp){
+      for (let sala of resp) {
         let htmlSala = `
         <td class="text-center">
           ${sala.nombre}
@@ -140,43 +143,43 @@ class Main{
         let tr = document.createElement("tr");
         tr.innerHTML = htmlSala;
 
-        tr.getElementsByClassName("btn-entrar-sala")[0].addEventListener("click", function(){
+        tr.getElementsByClassName("btn-entrar-sala")[0].addEventListener("click", function () {
           let claveSala = prompt("Introduce clave para la sala [" + sala.nombre + "]");
-          
+
           main.entrarSala(sala.nombre, claveSala);
         })
 
         tableSalas.appendChild(tr);
       }
-    }, function(err){
+    }, function (err) {
       console.error(err);
     });
   }
 
-  crearSalaManual(){
+  crearSalaManual() {
     let nombreSala = prompt("Nombre de la sala: ");
     let claveSala = prompt("Clave de la sala: ");
 
     main.crearSala(nombreSala, claveSala);
   }
 
-  displayJuego(){
+  displayJuego() {
     this.contJuego.style.display = "block";
     this.contSalas.style.display = "none";
   }
 
-  displaySalas(){
+  displaySalas() {
     this.contJuego.style.display = "none";
     this.contSalas.style.display = "block";
   }
 
-  displayTabla(){
+  displayTabla() {
     this.tabla.style.display = "block"
     usuarioTabla.innerHTML = localStorage.getItem("jugadorHash")
-    this.formLogIn.style.display = "none" 
+    this.formLogIn.style.display = "none"
   }
 
-  displayLogin(){
+  displayLogin() {
     this.tabla.style.display = "none"
     this.formLogIn.style.display = "block"
   }
