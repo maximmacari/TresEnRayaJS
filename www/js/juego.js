@@ -27,6 +27,12 @@ class Juego {
     this.ws.send(JSON.stringify(dataSend));
 
     new Audio("./res/sound/pulsar.wav").play();
+
+    /*
+    if (this.comprobarGanador != null) {
+      alert("Ha ganado" + this.comprobarGanador.value)
+    }
+    */
   }
 
   generarTablero(sala) {
