@@ -91,73 +91,85 @@ class Main{
   }
 
   entrarSala(nombreSala, claveSala){
-    if(this.sala === null){
-      let dataSend = {
-        jugadorHash: this.jugadorHash,
-        nombreSala: nombreSala,
-        claveSala: claveSala
-      };
+    if(main.jugadorHash !== null){
+      if(this.sala === null){
+        let dataSend = {
+          jugadorHash: this.jugadorHash,
+          nombreSala: nombreSala,
+          claveSala: claveSala
+        };
+  
+        tools.httpPost("/entrarSala", JSON.stringify(dataSend), function(msg){
+          let resp = JSON.parse(msg);
+  
+          if(resp.result){
+            main.sala = nombreSala;
+  
+            juego.init();
+  
+            tools.showModal("Entrar en sala", resp.msg);
+          }else{
+            tools.showModal("Entrar en sala", resp.msg);
+          }
+        }, function(err){
+          console.error(err);
+        });
+      }else{
+        tools.showModal("Info", "Ya estás en una sala!");
+      }
+    }else{
+      tools.showModal("Info", "Primero tienes que iniciar sesión!");
+    }
+  }
 
-      tools.httpPost("/entrarSala", JSON.stringify(dataSend), function(msg){
+  listarSalas(){
+    if(main.jugadorHash !== null){
+      tools.httpGet("/listSalas", function(msg){
         let resp = JSON.parse(msg);
-
-        if(resp.result){
-          main.sala = nombreSala;
-
-          juego.init();
-
-          tools.showModal("Entrar en sala", resp.msg);
-        }else{
-          tools.showModal("Entrar en sala", resp.msg);
+  
+        let tableSalas = document.getElementById("tableSalas")
+          .getElementsByTagName("tbody")[0];
+  
+        tableSalas.innerHTML = "";
+  
+        for(let sala of resp){
+          let htmlSala = `
+          <td class="text-center">
+            ${sala.nombre}
+          </td>
+          <td class="text-center">
+            <button class="btn btn-primary btn-block btn-entrar-sala">Entrar</button>
+          </td>
+          `.trim();
+  
+          let tr = document.createElement("tr");
+          tr.innerHTML = htmlSala;
+  
+          tr.getElementsByClassName("btn-entrar-sala")[0].addEventListener("click", function(){
+            let claveSala = prompt("Introduce clave para la sala [" + sala.nombre + "]");
+            
+            main.entrarSala(sala.nombre, claveSala);
+          })
+  
+          tableSalas.appendChild(tr);
         }
       }, function(err){
         console.error(err);
       });
     }else{
-      tools.showModal("Info", "Ya estás en una sala!");
+      tools.showModal("Info", "Primero tienes que iniciar sesión!");
     }
   }
 
-  listarSalas(){
-    tools.httpGet("/listSalas", function(msg){
-      let resp = JSON.parse(msg);
-
-      let tableSalas = document.getElementById("tableSalas")
-        .getElementsByTagName("tbody")[0];
-
-      tableSalas.innerHTML = "";
-
-      for(let sala of resp){
-        let htmlSala = `
-        <td class="text-center">
-          ${sala.nombre}
-        </td>
-        <td class="text-center">
-          <button class="btn btn-primary btn-block btn-entrar-sala">Entrar</button>
-        </td>
-        `.trim();
-
-        let tr = document.createElement("tr");
-        tr.innerHTML = htmlSala;
-
-        tr.getElementsByClassName("btn-entrar-sala")[0].addEventListener("click", function(){
-          let claveSala = prompt("Introduce clave para la sala [" + sala.nombre + "]");
-          
-          main.entrarSala(sala.nombre, claveSala);
-        })
-
-        tableSalas.appendChild(tr);
-      }
-    }, function(err){
-      console.error(err);
-    });
-  }
-
   crearSalaManual(){
-    let nombreSala = prompt("Nombre de la sala: ");
-    let claveSala = prompt("Clave de la sala: ");
+    if(main.jugadorHash !== null){
+      let nombreSala = prompt("Nombre de la sala: ");
+      let claveSala = prompt("Clave de la sala: ");
 
-    main.crearSala(nombreSala, claveSala);
+      main.crearSala(nombreSala, claveSala);
+    }else{
+      tools.showModal("Info", "Primero tienes que iniciar sesión!");
+    }
   }
 
   displayJuego(){

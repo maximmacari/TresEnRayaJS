@@ -1,23 +1,26 @@
 <nav class="navbar navbar-expand-sm navbar-dark bg-dark ">
-  <div class="navbar-brand mr-auto">
+  <div class="navbar-brand mr-2">
     <img src="./res/img/tic-tac-toe.svg" alt="Logotipo" width="50px" height="30px"
       onerror="this.onerror=null; this.src='../res/img/tic-tac-toe.png'" />
     <img src="./res/img/logo.png" width="140px" height="30px" alt="Logotipo" />
   </div>
-  <ul class="nav nav-pills navbar-collapse collapse justify-content-center" role="tablist">
-    <li class="nav-item">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navtabCollapse" aria-controls="navtabCollapse" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <ul class="nav nav-pills navbar-collapse collapse flex-column flex-sm-row" id="navtabCollapse" role="tablist">
+    <li class="nav-item flex-sm-grow-1 flex-md-grow-0">
       <a class="nav-link text-light active" id="juego-tab" data-toggle="tab" href="#tabJuego" role="tab" aria-controls="tabJuego"
         aria-selected="true">Juego</a>
     </li>
-    <li class="nav-item">
+    <li class="nav-item flex-sm-grow-1 flex-md-grow-0">
       <a class="nav-link text-light" id="descripcionJuego-tab" data-toggle="tab" href="#tabDescripcionJuego" role="tab"
         aria-controls="tabDescripcionJuego" aria-selected="true">Descripción del Juego</a>
     </li>
-    <li class="nav-item">
+    <li class="nav-item flex-fill flex-sm-grow-0">
       <a class="nav-link text-light" id="autores-tab" data-toggle="tab" href="#tabAutores" role="tab" aria-controls="tabAutores"
         aria-selected="true">Autores</a>
     </li>
-    <li class="nav-item">
+    <li class="nav-item flex-fill flex-sm-grow-0">
       <a class="nav-link text-light" id="referencias-tab" data-toggle="tab" href="#tabReferencias" role="tab" aria-controls="tabReferencias"
         aria-selected="true">Referencias</a>
     </li>
