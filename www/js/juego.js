@@ -3,7 +3,7 @@ class Juego {
     this.offsetX = 0;
     this.offsetY = 0;
 
-    this.wsHost = "192.168.3.148:4741";
+    this.wsHost = "192.168.1.112:4741";
 
     this.ws = null;
     this.isRunning = true;
@@ -30,7 +30,7 @@ class Juego {
 
     /*
     if (this.comprobarGanador != null) {
-      alert("Ha ganado" + this.comprobarGanador.value)
+      alert("Ha ganado" + this.comprobarGanador.value);
     }
     */
   }
@@ -57,13 +57,6 @@ class Juego {
 
       sala.tablero.push(filaCasillas);
     }
-  }
-
-
-  comprobarGanador() {
-    /*
-    valores = "cruz", "circulo" , "none"
-    */
   }
 
   actualizarCasillas() {
