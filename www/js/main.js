@@ -8,7 +8,7 @@ class Main {
     this.jugadorHash = null;
     this.sala = null;
   }
-  
+
   comprobacionUsuario() {
     if (localStorage.getItem("jugadorHash") !== null) {
       let dataSend = {
@@ -24,7 +24,7 @@ class Main {
           main.jugadorHash = resp.hash;
 
           main.displayTabla();
-          main.listarSalas();
+          main.listarSalas();3
         }
       }, function (err) {
         console.error(err);

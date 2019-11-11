@@ -30,7 +30,7 @@ class Juego {
 
     /*
     if (this.comprobarGanador != null) {
-      alert("Ha ganado" + this.comprobarGanador.value)
+      alert("Ha ganado" + this.comprobarGanador.value);
     }
     */
   }
