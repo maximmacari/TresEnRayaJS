@@ -27,6 +27,12 @@ class Juego {
     this.ws.send(JSON.stringify(dataSend));
 
     new Audio("./res/sound/pulsar.wav").play();
+
+    /*
+    if (this.comprobarGanador != null) {
+      alert("Ha ganado" + this.comprobarGanador.value)
+    }
+    */
   }
 
   generarTablero(sala) {
@@ -237,5 +243,16 @@ class Juego {
       }
       // handle incoming message
     };
+
+    //audio fondo bucle
+    var audio_fondo = new Audio("./res/sound/sonido_fondo.mp3");
+    audio_fondo.volume = 0.65;
+    audio_fondo.addEventListener('ended', function () {
+      audio_fondo.volume = 0.17;
+      this.currentTime = 0;
+      this.play();
+    }, false);
+    audio_fondo.play();
   }
+
 }
