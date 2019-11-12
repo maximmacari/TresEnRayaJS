@@ -13,6 +13,10 @@
         aria-selected="true">Juego</a>
     </li>
     <li class="nav-item flex-sm-grow-1 flex-md-grow-0">
+      <a class="nav-link text-light" id="juegoOnline-tab" data-toggle="tab" href="#tabJuegoOnline" role="tab" aria-controls="tabJuegoOnline"
+        aria-selected="true">Juego online</a>
+    </li>
+    <li class="nav-item flex-sm-grow-1 flex-md-grow-0">
       <a class="nav-link text-light" id="descripcionJuego-tab" data-toggle="tab" href="#tabDescripcionJuego" role="tab"
         aria-controls="tabDescripcionJuego" aria-selected="true">Descripción del Juego</a>
     </li>
@@ -30,6 +34,9 @@
   <div class="tab-content" id="tabContenedor">
     <div class="tab-pane fade show active" id="tabJuego" role="tabpanel">
       {{> juego}}
+    </div>
+    <div class="tab-pane fade show" id="tabJuegoOnline" role="tabpanel">
+      {{> juego_online}}
     </div>
     <div class="tab-pane fade" id="tabDescripcionJuego" role="tabpanel">
       {{> descripcion_juego}}
