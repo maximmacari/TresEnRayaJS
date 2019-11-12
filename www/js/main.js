@@ -3,10 +3,13 @@ class Main {
     this.formLogIn = document.getElementById("formLogin");
     this.contSalas = document.getElementById("contSalas");
     this.contJuego = document.getElementById("contJuego");
+    this.contMainJuego = document.getElementById("contMainJuego");
     this.tabla = document.getElementById("tablaUsuario")
 
     this.jugadorHash = null;
     this.sala = null;
+
+    this.contMainJuego.classList.remove("show");
   }
 
   comprobacionUsuario() {

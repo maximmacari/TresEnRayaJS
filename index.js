@@ -10,6 +10,7 @@ var wsServer = null;
 
 var salas = [];
 var clientes = [];
+var intervalPing = null;
 
 app.set('view engine', 'hbs');
 app.engine('hbs', hbs({
@@ -37,6 +38,7 @@ function Cliente(id, username, hash, maxScore) {
   this.username = username;
   this.hash = hash;
   this.maxScore = maxScore;
+  this.ping = new Date().getTime();
 }
 
 function Sala(nombreSala, claveSala, jugador) {
@@ -100,8 +102,9 @@ function initUsersDb() {
         console.error(err.message);
       }
     });
-  });
+  });  
 }
+
 function generarTablero(sala) {
   let nCasillas = [3, 3];
 
@@ -144,6 +147,11 @@ function initWsServer() {
   wsServer = new WebSocket.Server({ port: 4741 });
 
   wsServer.on('connection', function (ws, req) {
+    ws.isAlive = true;
+
+    ws.on("close", function(code, reason){
+      console.log("Código: " + code + "\nReason: " + reason);
+    });
 
     ws.on('message', message => {
       let msg = JSON.parse(message);
@@ -237,6 +245,23 @@ function initWsServer() {
     });
   });
 }
+
+intervalPing = setInterval(function ping() {
+  for(let cliente of clientes){
+    if(cliente.ws !== null){
+      if (cliente.ws.isAlive === false) {
+        cliente.ws.terminate();
+  
+        console.log("Cliente desconectado: " + cliente.hash);
+  
+        break;
+      }
+  
+      cliente.ws.isAlive = false;
+      cliente.ws.ping(function(){});
+    }
+  }
+}, 3000);
 
 app.get('/', function (req, res) {
   res.render('index', { layout: 'main' });

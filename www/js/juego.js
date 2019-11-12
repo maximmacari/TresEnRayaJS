@@ -177,7 +177,23 @@ class Juego {
     juego.ws.send(JSON.stringify(dataSend));
   }
 
-  init() {
+  heartbeat() {
+    
+    
+    if(this.ws){
+      clearTimeout(this.ws.pingTimeout);
+
+      this.ws.pingTimeout = setTimeout(() => {
+        this.ws.terminate();
+      }, 30000 + 1000);
+    }
+  }
+
+  initLocal(){
+
+  }
+
+  initOnline(){
     main.displayJuego();
 
     window.WebSocket = window.WebSocket || window.MozWebSocket;
@@ -185,6 +201,8 @@ class Juego {
     this.ws = new WebSocket('ws://' + juego.wsHost);
 
     this.ws.onopen = function () {
+      juego.heartbeat();
+
       let dataSend = {
         type: "registrarJugador",
         data: {
@@ -201,8 +219,11 @@ class Juego {
 
     this.ws.onclose = function () {
       clearInterval(juego.intervalUpdate);
+      clearTimeout(this.ws.pingTimeout);
       console.log("Conexión cerrada");
     }
+
+    this.ws.on('ping', juego.heartbeat);
 
     this.ws.onerror = function (error) {
       clearInterval(juego.intervalUpdate);
@@ -253,6 +274,14 @@ class Juego {
       this.play();
     }, false);
     audio_fondo.play();
+  }
+
+  init(online) {
+    if(online){
+      juego.initOnline();
+    }else{
+      juego.initLocal();
+    }
   }
 
 }

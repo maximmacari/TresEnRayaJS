@@ -9,7 +9,10 @@
   "bin": "index.js",
   "pkg": {
     "scripts": "*.js",
-    "assets": ["views/**/*", "www/**/*"]
+    "assets": [
+      "views/**/*",
+      "www/**/*"
+    ]
   },
   "author": "Grupo 3",
   "license": "Private",
@@ -20,6 +23,6 @@
     "pkg": "^4.4.0",
     "sqlite3": "^4.1.0",
     "websocket": "^1.0.30",
-    "ws": "^7.1.2"
+    "ws": "^7.2.0"
   }
 }
