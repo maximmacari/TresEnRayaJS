@@ -9,30 +9,93 @@ class Juego {
     this.isRunning = true;
 
     this.usuariosList = document.getElementById("usuariosList");
-    this.tablero = document.getElementById("tablero");
+    this.tablero = null;
 
     this.casillas = [];
+    this.turno = 1;
+    this.online = false;
   }
 
   celdaClick(position) {
-    let dataSend = {
-      type: "celdaClick",
-      data: {
-        nombreSala: main.sala,
-        position: position,
-        jugadorHash: main.jugadorHash
+    if(this.online){
+      let dataSend = {
+        type: "celdaClick",
+        data: {
+          nombreSala: main.sala,
+          position: position,
+          jugadorHash: main.jugadorHash
+        }
+      };
+  
+      this.ws.send(JSON.stringify(dataSend));
+    }else{
+      if(juego.turno === 1){
+        if(juego.casillas[position.y][position.x].value === "none"){
+          juego.casillas[position.y][position.x].value = "cruz";
+
+          setTimeout(function(){
+            let casillasLibres = [];
+            
+            for(let c=0;c<juego.casillas.length;c++){
+              for(let f=0;f<juego.casillas[c].length;f++){
+                if(juego.casillas[f][c].value === "none"){
+                  casillasLibres.push(juego.casillas[f][c]);
+                }
+              }
+            }
+
+            let casillaIA = casillasLibres[Math.floor(Math.random() * casillasLibres.length)];
+
+            juego.casillas[casillaIA.position.y][casillaIA.position.x].value = "circulo";
+
+            console.log(casillaIA);
+
+            juego.pintarCasillas();
+
+            juego.turno = 1;
+            juego.displayTurno();
+
+            new Audio("./res/sound/pulsar.wav").play();
+          }, 1000);
+
+          juego.pintarCasillas();
+
+          juego.turno = 2;
+          juego.displayTurno();
+
+          new Audio("./res/sound/pulsar.wav").play();
+        }
+      }else if(juego.turno === 2){
+        alert("No es tu turno");
       }
-    };
 
-    this.ws.send(JSON.stringify(dataSend));
-
-    new Audio("./res/sound/pulsar.wav").play();
+      juego.pintarCasillas();
+    }
 
     /*
     if (this.comprobarGanador != null) {
       alert("Ha ganado" + this.comprobarGanador.value);
     }
     */
+  }
+
+  displayTurno(){
+    if(!this.online){
+      let displayTurno1 = document.getElementsByClassName("turno-local-1")[0];
+      let displayTurno2 = document.getElementsByClassName("turno-local-2")[0];
+    
+      if(juego.turno === 1){
+        displayTurno1.classList.add("turno");
+        displayTurno2.classList.remove("turno");
+      }else if(juego.turno === 2){
+        displayTurno1.classList.remove("turno");
+        displayTurno2.classList.add("turno");
+      }
+    }else{
+      let displayTurno1 = document.getElementsByClassName("turno-online-1")[0];
+      let displayTurno2 = document.getElementsByClassName("turno-online-2")[0];
+
+    }
   }
 
   generarTablero(sala) {
@@ -55,7 +118,7 @@ class Juego {
         filaCasillas.push(casilla);
       }
 
-      sala.tablero.push(filaCasillas);
+      this.casillas.push(filaCasillas);
     }
   }
 
@@ -83,8 +146,6 @@ class Juego {
       for (let k = 0; k < cols.length; k++) {
         let col = cols[k];
         let casillaValue = juego.casillas[i][k].value;
-
-        console.log(casillaValue);
 
         if (casillaValue === "circulo") {
           col.getElementsByClassName("casilla")[0].innerHTML = svgCirculo;
@@ -143,7 +204,6 @@ class Juego {
   //crear celdas
   generarCasillas() {
     let nCasillas = [3, 3];
-    let casillas = [];
 
     for (let i = 0; i < nCasillas[1]; i++) {
       let filaCasillas = [];
@@ -160,10 +220,8 @@ class Juego {
         filaCasillas.push(casilla);
       }
 
-      casillas.push(filaCasillas);
+      this.casillas.push(filaCasillas);
     }
-
-    return casillas;
   }
 
   requestTablero() {
@@ -178,8 +236,6 @@ class Juego {
   }
 
   heartbeat() {
-    
-    
     if(this.ws){
       clearTimeout(this.ws.pingTimeout);
 
@@ -190,7 +246,12 @@ class Juego {
   }
 
   initLocal(){
+    this.tablero = document.getElementById("tableroLocal");
 
+    console.log
+
+    juego.generarTablero();
+    juego.pintarCasillas();
   }
 
   initOnline(){
@@ -277,6 +338,8 @@ class Juego {
   }
 
   init(online) {
+    this.online = online;
+
     if(online){
       juego.initOnline();
     }else{

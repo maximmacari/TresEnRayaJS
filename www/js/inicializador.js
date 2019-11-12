@@ -10,4 +10,5 @@ window.addEventListener("DOMContentLoaded", () => {
   juego = new Juego();
   
   main.comprobacionUsuario();
+  juego.initLocal();
 });

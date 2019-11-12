@@ -13,19 +13,23 @@ body{
   background-color: #212529 !important;
 }
 
+.turno{
+  background-color: rgb(167, 79, 79);
+}
+
 .cont-tabla{
   background-color: #a4a4a4;
   min-height: 400px;
   overflow-y: auto;
 }
 
-#tablero{
+.tablero{
   background-color: #14bdac;
   margin: 0 auto;
   border-radius: 7px;
 }
 
-#tablero td{
+.tablero td{
   padding: 5px;
   border: 1px solid #000;
 }
@@ -68,6 +72,7 @@ body{
   border: 1px solid #7c5b00;
   background-color: #FF9933;
   border-radius: 7px;
+  transition: background-color 0.3s;
 }
 
 /*Descripción juego*/
