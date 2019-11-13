@@ -13,10 +13,6 @@ body{
   background-color: #212529 !important;
 }
 
-.turno{
-  background-color: rgb(167, 79, 79);
-}
-
 .cont-tabla{
   background-color: #a4a4a4;
   min-height: 400px;
@@ -69,10 +65,15 @@ body{
 
 .jugador-display{
   padding: 2px;
-  border: 1px solid #7c5b00;
-  background-color: #FF9933;
-  border-radius: 7px;
+  border: 2px solid #01393d;
+  color: white;
+  background-color:  #383b3f;
+  border-radius: 3px;
   transition: background-color 0.3s;
+}
+
+.turno{
+  background-color: rgb(5, 95, 95);
 }
 
 /*Descripción juego*/

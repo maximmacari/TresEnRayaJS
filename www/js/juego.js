@@ -23,28 +23,23 @@ class Juego {
   comprobarGanador() {
     var casillaGanadora = null
     //tablero[0][0].value -> "cruz", "circulo", "none" [y, x]
-    if (juego.casillas[0][0].value == juego.casillas[0][1] && juego.casillas[0][1].value == juego.casillas[0][2] && juego.casillas[0][0].value !== "none") casillaGanadora = juego.casillas[0][0];
-    else if (juego.casillas[1][0].value == juego.casillas[1][1] && juego.casillas[1][1].value == juego.casillas[1][2] && juego.casillas[1][0].value !== "none") casillaGanadora = juego.casillas[1][0];
-    else if (juego.casillas[2][0].value == juego.casillas[2][1] && juego.casillas[2][1].value == juego.casillas[2][2] && juego.casillas[2][0].value !== "none") casillaGanadora = juego.casillas[2][0];
+    if (juego.casillas[0][0].value == juego.casillas[0][1].value && juego.casillas[0][1].value == juego.casillas[0][2].value && juego.casillas[0][0].value !== "none") casillaGanadora = juego.casillas[0][0];
+    else if (juego.casillas[1][0].value == juego.casillas[1][1].value && juego.casillas[1][1].value == juego.casillas[1][2].value && juego.casillas[1][0].value !== "none") casillaGanadora = juego.casillas[1][0];
+    else if (juego.casillas[2][0].value == juego.casillas[2][1].value && juego.casillas[2][1].value == juego.casillas[2][2].value && juego.casillas[2][0].value !== "none") casillaGanadora = juego.casillas[2][0];
     //Las líneas verticales
-    else if (juego.casillas[0][0].value == juego.casillas[1][0] && juego.casillas[1][0].value == juego.casillas[2][0] && juego.casillas[0][0].value !== "none") casillaGanadora = juego.casillas[0][0];
-    else if (juego.casillas[0][1].value == juego.casillas[1][1] && juego.casillas[1][1].value == juego.casillas[2][1] && juego.casillas[0][1].value !== "none") casillaGanadora = juego.casillas[0][1];
-    else if (juego.casillas[0][2].value == juego.casillas[1][2] && juego.casillas[1][2].value == juego.casillas[2][2] && juego.casillas[0][2].value !== "none") casillaGanadora = juego.casillas[0][2];
+    else if (juego.casillas[0][0].value == juego.casillas[1][0].value && juego.casillas[1][0].value == juego.casillas[2][0].value && juego.casillas[0][0].value !== "none") casillaGanadora = juego.casillas[0][0];
+    else if (juego.casillas[0][1].value == juego.casillas[1][1].value && juego.casillas[1][1].value == juego.casillas[2][1].value && juego.casillas[0][1].value !== "none") casillaGanadora = juego.casillas[0][1];
+    else if (juego.casillas[0][2].value == juego.casillas[1][2].value && juego.casillas[1][2].value == juego.casillas[2][2].value && juego.casillas[0][2].value !== "none") casillaGanadora = juego.casillas[0][2];
     //Las diagonales
-    else if (juego.casillas[0][0].value == juego.casillas[1][1] && juego.casillas[1][1].value == juego.casillas[2][2] && juego.casillas[0][0].value !== "none") casillaGanadora = juego.casillas[0][0];
-    else if (juego.casillas[2][0].value == juego.casillas[1][1] && juego.casillas[1][1].value == juego.casillas[0][2] && juego.casillas[2][0].value !== "none") casillaGanadora = juego.casillas[2][0];
-    else return casillaGanadora;
+    else if (juego.casillas[0][0].value == juego.casillas[1][1].value && juego.casillas[1][1].value == juego.casillas[2][2].value && juego.casillas[0][0].value !== "none") casillaGanadora = juego.casillas[0][0];
+    else if (juego.casillas[2][0].value == juego.casillas[1][1].value && juego.casillas[1][1].value == juego.casillas[0][2].value && juego.casillas[2][0].value !== "none") casillaGanadora = juego.casillas[2][0];
+    
+    if(casillaGanadora){
+      return casillaGanadora.value;
+    }else{
+      return null;
+    }
   }
-
-
-
-
-
-
-
-
-
-
 
 
   celdaClick(position) {
@@ -60,10 +55,7 @@ class Juego {
 
       this.ws.send(JSON.stringify(dataSend));
     } else {
-
-      if (this.comprobarGanador() !== null) {
-        alert("hay ganador");
-      }
+      
 
       if (juego.turno === 1) {
         if (juego.casillas[position.y][position.x].value === "none") {
@@ -91,6 +83,13 @@ class Juego {
             juego.turno = 1;
             juego.displayTurno();
 
+            let ganador = this.comprobarGanador();
+
+            if (this.comprobarGanador() !== null) {
+              tools.showModal("Ganador", `Ganador: ${ganador}`);
+              juego.isRunning = false;
+            }
+
             new Audio("./res/sound/pulsar.wav").play();
           }, 1000);
 
@@ -98,6 +97,13 @@ class Juego {
 
           juego.turno = 2;
           juego.displayTurno();
+
+          let ganador = this.comprobarGanador();
+
+          if (this.comprobarGanador() !== null) {
+            tools.showModal("Ganador", `Ganador: ${ganador}`);
+            juego.isRunning = false;
+          }
 
           new Audio("./res/sound/pulsar.wav").play();
         }
@@ -220,6 +226,7 @@ class Juego {
           celdaCasilla.innerHTML = htmlCasilla;
 
           celdaCasilla.addEventListener("click", () => {
+            if(juego.isRunning)
             juego.celdaClick(celda.position);
           });
 
