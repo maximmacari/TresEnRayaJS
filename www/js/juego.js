@@ -16,8 +16,39 @@ class Juego {
     this.online = false;
   }
 
+
+
+
+
+  comprobarGanador() {
+    var casillaGanadora = null
+    //tablero[0][0].value -> "cruz", "circulo", "none" [y, x]
+    if (juego.casillas[0][0].value == juego.casillas[0][1] && juego.casillas[0][1].value == juego.casillas[0][2] && juego.casillas[0][0].value !== "none") casillaGanadora = juego.casillas[0][0];
+    else if (juego.casillas[1][0].value == juego.casillas[1][1] && juego.casillas[1][1].value == juego.casillas[1][2] && juego.casillas[1][0].value !== "none") casillaGanadora = juego.casillas[1][0];
+    else if (juego.casillas[2][0].value == juego.casillas[2][1] && juego.casillas[2][1].value == juego.casillas[2][2] && juego.casillas[2][0].value !== "none") casillaGanadora = juego.casillas[2][0];
+    //Las líneas verticales
+    else if (juego.casillas[0][0].value == juego.casillas[1][0] && juego.casillas[1][0].value == juego.casillas[2][0] && juego.casillas[0][0].value !== "none") casillaGanadora = juego.casillas[0][0];
+    else if (juego.casillas[0][1].value == juego.casillas[1][1] && juego.casillas[1][1].value == juego.casillas[2][1] && juego.casillas[0][1].value !== "none") casillaGanadora = juego.casillas[0][1];
+    else if (juego.casillas[0][2].value == juego.casillas[1][2] && juego.casillas[1][2].value == juego.casillas[2][2] && juego.casillas[0][2].value !== "none") casillaGanadora = juego.casillas[0][2];
+    //Las diagonales
+    else if (juego.casillas[0][0].value == juego.casillas[1][1] && juego.casillas[1][1].value == juego.casillas[2][2] && juego.casillas[0][0].value !== "none") casillaGanadora = juego.casillas[0][0];
+    else if (juego.casillas[2][0].value == juego.casillas[1][1] && juego.casillas[1][1].value == juego.casillas[0][2] && juego.casillas[2][0].value !== "none") casillaGanadora = juego.casillas[2][0];
+    else return casillaGanadora;
+  }
+
+
+
+
+
+
+
+
+
+
+
+
   celdaClick(position) {
-    if(this.online){
+    if (this.online) {
       let dataSend = {
         type: "celdaClick",
         data: {
@@ -26,19 +57,24 @@ class Juego {
           jugadorHash: main.jugadorHash
         }
       };
-  
+
       this.ws.send(JSON.stringify(dataSend));
-    }else{
-      if(juego.turno === 1){
-        if(juego.casillas[position.y][position.x].value === "none"){
+    } else {
+
+      if (this.comprobarGanador() !== null) {
+        alert("hay ganador");
+      }
+
+      if (juego.turno === 1) {
+        if (juego.casillas[position.y][position.x].value === "none") {
           juego.casillas[position.y][position.x].value = "cruz";
 
-          setTimeout(function(){
+          setTimeout(function () {
             let casillasLibres = [];
-            
-            for(let c=0;c<juego.casillas.length;c++){
-              for(let f=0;f<juego.casillas[c].length;f++){
-                if(juego.casillas[f][c].value === "none"){
+
+            for (let c = 0; c < juego.casillas.length; c++) {
+              for (let f = 0; f < juego.casillas[c].length; f++) {
+                if (juego.casillas[f][c].value === "none") {
                   casillasLibres.push(juego.casillas[f][c]);
                 }
               }
@@ -65,33 +101,29 @@ class Juego {
 
           new Audio("./res/sound/pulsar.wav").play();
         }
-      }else if(juego.turno === 2){
+      } else if (juego.turno === 2) {
         alert("No es tu turno");
       }
 
       juego.pintarCasillas();
     }
-
-    /*
-    if (this.comprobarGanador != null) {
-      alert("Ha ganado" + this.comprobarGanador.value);
-    }
-    */
   }
 
-  displayTurno(){
-    if(!this.online){
+
+
+  displayTurno() {
+    if (!this.online) {
       let displayTurno1 = document.getElementsByClassName("turno-local-1")[0];
       let displayTurno2 = document.getElementsByClassName("turno-local-2")[0];
-    
-      if(juego.turno === 1){
+
+      if (juego.turno === 1) {
         displayTurno1.classList.add("turno");
         displayTurno2.classList.remove("turno");
-      }else if(juego.turno === 2){
+      } else if (juego.turno === 2) {
         displayTurno1.classList.remove("turno");
         displayTurno2.classList.add("turno");
       }
-    }else{
+    } else {
       let displayTurno1 = document.getElementsByClassName("turno-online-1")[0];
       let displayTurno2 = document.getElementsByClassName("turno-online-2")[0];
 
@@ -236,7 +268,7 @@ class Juego {
   }
 
   heartbeat() {
-    if(this.ws){
+    if (this.ws) {
       clearTimeout(this.ws.pingTimeout);
 
       this.ws.pingTimeout = setTimeout(() => {
@@ -245,7 +277,7 @@ class Juego {
     }
   }
 
-  initLocal(){
+  initLocal() {
     this.tablero = document.getElementById("tableroLocal");
 
     console.log
@@ -254,7 +286,7 @@ class Juego {
     juego.pintarCasillas();
   }
 
-  initOnline(){
+  initOnline() {
     main.displayJuego();
 
     window.WebSocket = window.WebSocket || window.MozWebSocket;
@@ -340,9 +372,9 @@ class Juego {
   init(online) {
     this.online = online;
 
-    if(online){
+    if (online) {
       juego.initOnline();
-    }else{
+    } else {
       juego.initLocal();
     }
   }
