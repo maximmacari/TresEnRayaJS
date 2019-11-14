@@ -1,3 +1,4 @@
+//Se crea la clase juego
 class Juego {
   constructor() {
     this.offsetX = 0;
@@ -16,6 +17,8 @@ class Juego {
     this.online = false;
   }
 
+  //Funcion para comprobar el ganador, comprueba cada ceelda que no 
+  //esté vacía y que su contenido sea igual a sus 2 celdas siguientes.
   comprobarGanador() {
     var casillaGanadora = null
     //tablero[0][0].value -> "cruz", "circulo", "none" [y, x]
@@ -52,7 +55,7 @@ class Juego {
     }
   }
 
-
+//Esta celda permite hacer clic en la celda
   celdaClick(position) {
     if (this.online) {
       let dataSend = {
@@ -97,7 +100,7 @@ class Juego {
               tools.showModal("Ganador", `Ganador: ${ganador}`);
               juego.isRunning = false;
             }
-
+            //Al hacer click se escuha el sonido
             new Audio("./media/pulsar.wav").play();
           }, 1000);
 
@@ -123,6 +126,7 @@ class Juego {
     }
   }
 
+  //muestra el turno del jugador
   displayTurno() {
     if (!this.online) {
       let displayTurno1 = document.getElementsByClassName("turno-local-1")[0];
@@ -142,9 +146,9 @@ class Juego {
     }
   }
 
+  //dibuja el tablero con cada casilla
   generarTablero(sala) {
     let nCasillas = [3, 3];
-
     this.casillas = [];
 
     for (let i = 0; i < nCasillas[1]; i++) {
@@ -164,9 +168,9 @@ class Juego {
     }
   }
 
+  
   actualizarCasillas() {
     console.log("ACTUALIZANDO CASILLAS");
-
     let rows = this.tablero.getElementsByTagName("tr");
 
     let svgCruz = `
@@ -267,6 +271,7 @@ class Juego {
     }
   }
 
+  //prepara el tablero para enviarlo si lo piden
   requestTablero() {
     let dataSend = {
       type: "getTablero",
@@ -278,6 +283,7 @@ class Juego {
     juego.ws.send(JSON.stringify(dataSend));
   }
 
+  //Para saber si el usuario sigue estando online
   heartbeat() {
     if (this.ws) {
       clearTimeout(this.ws.pingTimeout);
@@ -292,11 +298,11 @@ class Juego {
     this.tablero = document.getElementById("tableroLocal");
 
     console.log
-
     juego.generarTablero();
     juego.pintarCasillas();
   }
 
+  //Iniciar online 
   initOnline() {
     main.displayJuego();
 
@@ -383,6 +389,7 @@ class Juego {
     audio_fondo.play();
   }
 
+  //Iniciializa el juego online
   init(online) {
     this.online = online;
 
