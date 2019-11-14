@@ -115,6 +115,7 @@ footer {
 
 .autor_card{
   background: RGB(194,197,204,0.25);
+  margin-top: 20px;
 }
 
 .autor_card:hover{
