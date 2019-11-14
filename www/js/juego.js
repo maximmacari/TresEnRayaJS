@@ -157,8 +157,7 @@ class Juego {
             y: i
           },
           value: "none"
-        };
-
+        }; 
         filaCasillas.push(casilla);
       }
       this.casillas.push(filaCasillas);
