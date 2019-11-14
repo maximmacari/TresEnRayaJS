@@ -6,12 +6,15 @@ const bodyParser = require('body-parser');
 const WebSocket = require('ws');
 const sqlite3 = require('sqlite3').verbose();
 const tools = require('./tools.js');
+const os = require('os');
+const open = require('open');
 //Es el web socket server
 var wsServer = null;
 
 var salas = [];
 var clientes = [];
 var intervalPing = null;
+var ifaces = os.networkInterfaces();
 
 //Se estable un motor de templates que es el Handlebars
 app.set('view engine', 'hbs');
@@ -522,4 +525,20 @@ initWsServer();
 //Se ejecuta el servidor para que los jugadores puedan entrar a la página
 app.listen(4740, function () {
   console.log('TresEnRaya, escuchando en el puerto 4740!');
+  
+  Object.keys(ifaces).forEach(function (ifname) {
+    var alias = 0;
+
+    ifaces[ifname].forEach(function (iface) {
+      if ('IPv4' !== iface.family || iface.internal !== false) {
+        return;
+      }
+
+      console.log("IP Local (Para que se conecten otros equipos): http://" + iface.address + ":4740");
+
+      ++alias;
+    });
+  });
+
+  open('http://localhost:4740/', {app: ['chrome']});
 });
