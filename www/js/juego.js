@@ -19,35 +19,35 @@ class Juego {
   comprobarGanador() {
     var casillaGanadora = null
     //tablero[0][0].value -> "cruz", "circulo", "none" [y, x]
-    if (juego.casillas[0][0].value == juego.casillas[0][1].value 
-      && juego.casillas[0][1].value == juego.casillas[0][2].value 
+    if (juego.casillas[0][0].value == juego.casillas[0][1].value
+      && juego.casillas[0][1].value == juego.casillas[0][2].value
       && juego.casillas[0][0].value !== "none") casillaGanadora = juego.casillas[0][0];
-    else if (juego.casillas[1][0].value == juego.casillas[1][1].value 
-      && juego.casillas[1][1].value == juego.casillas[1][2].value 
+    else if (juego.casillas[1][0].value == juego.casillas[1][1].value
+      && juego.casillas[1][1].value == juego.casillas[1][2].value
       && juego.casillas[1][0].value !== "none") casillaGanadora = juego.casillas[1][0];
-    else if (juego.casillas[2][0].value == juego.casillas[2][1].value 
-      && juego.casillas[2][1].value == juego.casillas[2][2].value 
+    else if (juego.casillas[2][0].value == juego.casillas[2][1].value
+      && juego.casillas[2][1].value == juego.casillas[2][2].value
       && juego.casillas[2][0].value !== "none") casillaGanadora = juego.casillas[2][0];
     //Las líneas verticales
-    else if (juego.casillas[0][0].value == juego.casillas[1][0].value 
-      && juego.casillas[1][0].value == juego.casillas[2][0].value 
+    else if (juego.casillas[0][0].value == juego.casillas[1][0].value
+      && juego.casillas[1][0].value == juego.casillas[2][0].value
       && juego.casillas[0][0].value !== "none") casillaGanadora = juego.casillas[0][0];
-    else if (juego.casillas[0][1].value == juego.casillas[1][1].value 
-      && juego.casillas[1][1].value == juego.casillas[2][1].value 
+    else if (juego.casillas[0][1].value == juego.casillas[1][1].value
+      && juego.casillas[1][1].value == juego.casillas[2][1].value
       && juego.casillas[0][1].value !== "none") casillaGanadora = juego.casillas[0][1];
-    else if (juego.casillas[0][2].value == juego.casillas[1][2].value 
-      && juego.casillas[1][2].value == juego.casillas[2][2].value 
+    else if (juego.casillas[0][2].value == juego.casillas[1][2].value
+      && juego.casillas[1][2].value == juego.casillas[2][2].value
       && juego.casillas[0][2].value !== "none") casillaGanadora = juego.casillas[0][2];
     //Las diagonales
-    else if (juego.casillas[0][0].value == juego.casillas[1][1].value 
-      && juego.casillas[1][1].value == juego.casillas[2][2].value 
+    else if (juego.casillas[0][0].value == juego.casillas[1][1].value
+      && juego.casillas[1][1].value == juego.casillas[2][2].value
       && juego.casillas[0][0].value !== "none") casillaGanadora = juego.casillas[0][0];
-    else if (juego.casillas[2][0].value == juego.casillas[1][1].value 
+    else if (juego.casillas[2][0].value == juego.casillas[1][1].value
       && juego.casillas[1][1].value == juego.casillas[0][2].value
       && juego.casillas[2][0].value !== "none") casillaGanadora = juego.casillas[2][0];
-    if(casillaGanadora){
+    if (casillaGanadora) {
       return casillaGanadora.value;
-    }else{
+    } else {
       return null;
     }
   }
@@ -63,11 +63,8 @@ class Juego {
           jugadorHash: main.jugadorHash
         }
       };
-
       this.ws.send(JSON.stringify(dataSend));
     } else {
-      
-
       if (juego.turno === 1) {
         if (juego.casillas[position.y][position.x].value === "none") {
           juego.casillas[position.y][position.x].value = "cruz";
@@ -126,8 +123,6 @@ class Juego {
     }
   }
 
-
-
   displayTurno() {
     if (!this.online) {
       let displayTurno1 = document.getElementsByClassName("turno-local-1")[0];
@@ -166,7 +161,6 @@ class Juego {
 
         filaCasillas.push(casilla);
       }
-
       this.casillas.push(filaCasillas);
     }
   }
@@ -237,8 +231,8 @@ class Juego {
           celdaCasilla.innerHTML = htmlCasilla;
 
           celdaCasilla.addEventListener("click", () => {
-            if(juego.isRunning)
-            juego.celdaClick(celda.position);
+            if (juego.isRunning)
+              juego.celdaClick(celda.position);
           });
 
           row.appendChild(celdaCasilla);
