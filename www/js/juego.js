@@ -19,16 +19,32 @@ class Juego {
   comprobarGanador() {
     var casillaGanadora = null
     //tablero[0][0].value -> "cruz", "circulo", "none" [y, x]
-    if (juego.casillas[0][0].value == juego.casillas[0][1].value && juego.casillas[0][1].value == juego.casillas[0][2].value && juego.casillas[0][0].value !== "none") casillaGanadora = juego.casillas[0][0];
-    else if (juego.casillas[1][0].value == juego.casillas[1][1].value && juego.casillas[1][1].value == juego.casillas[1][2].value && juego.casillas[1][0].value !== "none") casillaGanadora = juego.casillas[1][0];
-    else if (juego.casillas[2][0].value == juego.casillas[2][1].value && juego.casillas[2][1].value == juego.casillas[2][2].value && juego.casillas[2][0].value !== "none") casillaGanadora = juego.casillas[2][0];
+    if (juego.casillas[0][0].value == juego.casillas[0][1].value 
+      && juego.casillas[0][1].value == juego.casillas[0][2].value 
+      && juego.casillas[0][0].value !== "none") casillaGanadora = juego.casillas[0][0];
+    else if (juego.casillas[1][0].value == juego.casillas[1][1].value 
+      && juego.casillas[1][1].value == juego.casillas[1][2].value 
+      && juego.casillas[1][0].value !== "none") casillaGanadora = juego.casillas[1][0];
+    else if (juego.casillas[2][0].value == juego.casillas[2][1].value 
+      && juego.casillas[2][1].value == juego.casillas[2][2].value 
+      && juego.casillas[2][0].value !== "none") casillaGanadora = juego.casillas[2][0];
     //Las líneas verticales
-    else if (juego.casillas[0][0].value == juego.casillas[1][0].value && juego.casillas[1][0].value == juego.casillas[2][0].value && juego.casillas[0][0].value !== "none") casillaGanadora = juego.casillas[0][0];
-    else if (juego.casillas[0][1].value == juego.casillas[1][1].value && juego.casillas[1][1].value == juego.casillas[2][1].value && juego.casillas[0][1].value !== "none") casillaGanadora = juego.casillas[0][1];
-    else if (juego.casillas[0][2].value == juego.casillas[1][2].value && juego.casillas[1][2].value == juego.casillas[2][2].value && juego.casillas[0][2].value !== "none") casillaGanadora = juego.casillas[0][2];
+    else if (juego.casillas[0][0].value == juego.casillas[1][0].value 
+      && juego.casillas[1][0].value == juego.casillas[2][0].value 
+      && juego.casillas[0][0].value !== "none") casillaGanadora = juego.casillas[0][0];
+    else if (juego.casillas[0][1].value == juego.casillas[1][1].value 
+      && juego.casillas[1][1].value == juego.casillas[2][1].value 
+      && juego.casillas[0][1].value !== "none") casillaGanadora = juego.casillas[0][1];
+    else if (juego.casillas[0][2].value == juego.casillas[1][2].value 
+      && juego.casillas[1][2].value == juego.casillas[2][2].value 
+      && juego.casillas[0][2].value !== "none") casillaGanadora = juego.casillas[0][2];
     //Las diagonales
-    else if (juego.casillas[0][0].value == juego.casillas[1][1].value && juego.casillas[1][1].value == juego.casillas[2][2].value && juego.casillas[0][0].value !== "none") casillaGanadora = juego.casillas[0][0];
-    else if (juego.casillas[2][0].value == juego.casillas[1][1].value && juego.casillas[1][1].value == juego.casillas[0][2].value && juego.casillas[2][0].value !== "none") casillaGanadora = juego.casillas[2][0];
+    else if (juego.casillas[0][0].value == juego.casillas[1][1].value 
+      && juego.casillas[1][1].value == juego.casillas[2][2].value 
+      && juego.casillas[0][0].value !== "none") casillaGanadora = juego.casillas[0][0];
+    else if (juego.casillas[2][0].value == juego.casillas[1][1].value 
+      && juego.casillas[1][1].value == juego.casillas[0][2].value
+      && juego.casillas[2][0].value !== "none") casillaGanadora = juego.casillas[2][0];
     if(casillaGanadora){
       return casillaGanadora.value;
     }else{

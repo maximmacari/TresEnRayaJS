@@ -8,6 +8,14 @@ body{
 }
 
 /*Juego*/
+.juegoNuevo{
+  background-color: #212529;
+  text-decoration: none;
+}
+.juegoNuevo a{
+  color: white;
+  font-weight: bold;
+}
 
 #tableSalas {
   background-color: #212529 !important;
