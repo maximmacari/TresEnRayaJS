@@ -58,6 +58,7 @@ class Juego {
 //Esta celda permite hacer clic en la celda
   celdaClick(position) {
     if (this.online) {
+      console.log("CLICK ONLINE");
       let dataSend = {
         type: "celdaClick",
         data: {
@@ -68,6 +69,7 @@ class Juego {
       };
       this.ws.send(JSON.stringify(dataSend));
     } else {
+      console.log("CLICK NO ONLINE");
       if (juego.turno === 1) {
         if (juego.casillas[position.y][position.x].value === "none") {
           juego.casillas[position.y][position.x].value = "cruz";
@@ -284,26 +286,27 @@ class Juego {
   }
 
   //Para saber si el usuario sigue estando online
-  heartbeat() {
-    if (this.ws) {
-      clearTimeout(this.ws.pingTimeout);
+  // heartbeat() {
+  //   if (this.ws) {
+  //     clearTimeout(this.ws.pingTimeout);
 
-      this.ws.pingTimeout = setTimeout(() => {
-        this.ws.terminate();
-      }, 30000 + 1000);
-    }
-  }
+  //     this.ws.pingTimeout = setTimeout(() => {
+  //       this.ws.terminate();
+  //     }, 30000 + 1000);
+  //   }
+  // }
 
   initLocal() {
     this.tablero = document.getElementById("tableroLocal");
 
-    console.log
     juego.generarTablero();
     juego.pintarCasillas();
   }
 
   //Iniciar online 
   initOnline() {
+    this.tablero = document.getElementById("tablero");
+
     main.displayJuego();
 
     window.WebSocket = window.WebSocket || window.MozWebSocket;
@@ -311,8 +314,6 @@ class Juego {
     this.ws = new WebSocket('ws://' + juego.wsHost);
 
     this.ws.onopen = function () {
-      juego.heartbeat();
-
       let dataSend = {
         type: "registrarJugador",
         data: {
@@ -329,14 +330,9 @@ class Juego {
 
     this.ws.onclose = function () {
       clearInterval(juego.intervalUpdate);
-      if(juego.ws){
-        clearTimeout(juego.ws.pingTimeout);
-      }
       
       console.log("Conexión cerrada");
     }
-
-    this.ws.on('ping', juego.heartbeat);
 
     this.ws.onerror = function (error) {
       clearInterval(juego.intervalUpdate);
@@ -362,7 +358,7 @@ class Juego {
           }
         } else if (msg.type === "tablero") {
           juego.casillas = msg.data.tablero;
-          juego.pintarCasillas(juego.generarCasillas());
+          juego.pintarCasillas();
         } else if (msg.type === "registrarJugador") {
           if (msg.data.result) {
             console.log("JUGADOR REGISTRADO");

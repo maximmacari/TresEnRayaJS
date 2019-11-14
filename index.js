@@ -189,7 +189,6 @@ function initWsServer() {
 
         ws.send(JSON.stringify(dataSend));
       } else if (msg.type === "getTablero") {
-
         enviarTablero(ws, msg.data.nombreSala);
       } else if (msg.type === "celdaClick") {
         let position = msg.data.position;
@@ -225,8 +224,6 @@ function initWsServer() {
             sala.tablero[position.y][position.x].value = ficha;
           }
 
-          comprobarGanador(sala.tablero, jugadorId);
-
           for (let jugadorAux of sala.jugadores) {
             if (jugadorAux !== null) {
               let jugador = searchCliente(jugadorAux);
@@ -259,22 +256,22 @@ function initWsServer() {
 }
 
 //Cada tres segundos se comprueba si los clientes registrados están online
-intervalPing = setInterval(function ping() {
-  for(let cliente of clientes){
-    if(cliente.ws !== null){
-      if (cliente.ws.isAlive === false) {
-        cliente.ws.terminate();
+// intervalPing = setInterval(function ping() {
+//   for(let cliente of clientes){
+//     if(cliente.ws !== null){
+//       if (cliente.ws.isAlive === false) {
+//         cliente.ws.terminate();
   
-        console.log("Cliente desconectado: " + cliente.hash);
+//         console.log("Cliente desconectado: " + cliente.hash);
   
-        break;
-      }
+//         break;
+//       }
   
-      cliente.ws.isAlive = false;
-      cliente.ws.ping(function(){});
-    }
-  }
-}, 3000);
+//       cliente.ws.isAlive = false;
+//       cliente.ws.ping(function(){});
+//     }
+//   }
+// }, 3000);
 
 //Se define la ruta a la que se hará un get
 app.get('/', function (req, res) {
