@@ -98,7 +98,7 @@ class Juego {
               juego.isRunning = false;
             }
 
-            new Audio("./res/sound/pulsar.wav").play();
+            new Audio("./media/pulsar.wav").play();
           }, 1000);
 
           juego.pintarCasillas();
@@ -113,7 +113,7 @@ class Juego {
             juego.isRunning = false;
           }
 
-          new Audio("./res/sound/pulsar.wav").play();
+          new Audio("./media/pulsar.wav").play();
         }
       } else if (juego.turno === 2) {
         alert("No es tu turno");
@@ -371,7 +371,7 @@ class Juego {
     };
 
     //audio fondo bucle
-    var audio_fondo = new Audio("./res/sound/sonido_fondo.mp3");
+    var audio_fondo = new Audio("./media/sonido_fondo.mp3");
     audio_fondo.volume = 0.65;
     audio_fondo.addEventListener('ended', function () {
       audio_fondo.volume = 0.17;
