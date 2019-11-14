@@ -1,3 +1,4 @@
+//Herramientas para el servidor 
 function randomString(length) {
   var text = "";
   var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -7,7 +8,7 @@ function randomString(length) {
    
   return text;
 }
-
+//Se exporta este modulo para que sea accesible desde otros ficheros
 module.exports = {
   randomString: randomString
 };
