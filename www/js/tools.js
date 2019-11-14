@@ -1,3 +1,4 @@
+//Se define una clase Tools que es la encargada de hacer las peticiones desde el lado cliente
 class Tools {
   constructor() {
 
@@ -19,6 +20,7 @@ class Tools {
     return encodeURI(data);
   }
 
+  //Función encargada de las peticiones get
   httpGet(url, cbSuccess, cbError) {
     var xhr = new XMLHttpRequest();
 
@@ -51,7 +53,7 @@ class Tools {
       cbError(err);
     }
   }
-
+  //Método para las peticiones post
   httpPost(url, data, cbSuccess, cbError) {
     var xhr = new XMLHttpRequest();
 
@@ -91,7 +93,7 @@ class Tools {
 
     return networkState;
   }
-
+  //Función encargada de mostrar el alert
   showModal(title, msg, cbOk) {
     let modalHtml = `
     <div class="modal-dialog">
