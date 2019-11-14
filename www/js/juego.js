@@ -16,10 +16,6 @@ class Juego {
     this.online = false;
   }
 
-
-
-
-
   comprobarGanador() {
     var casillaGanadora = null
     //tablero[0][0].value -> "cruz", "circulo", "none" [y, x]
@@ -33,7 +29,6 @@ class Juego {
     //Las diagonales
     else if (juego.casillas[0][0].value == juego.casillas[1][1].value && juego.casillas[1][1].value == juego.casillas[2][2].value && juego.casillas[0][0].value !== "none") casillaGanadora = juego.casillas[0][0];
     else if (juego.casillas[2][0].value == juego.casillas[1][1].value && juego.casillas[1][1].value == juego.casillas[0][2].value && juego.casillas[2][0].value !== "none") casillaGanadora = juego.casillas[2][0];
-    
     if(casillaGanadora){
       return casillaGanadora.value;
     }else{
@@ -83,9 +78,9 @@ class Juego {
             juego.turno = 1;
             juego.displayTurno();
 
-            let ganador = this.comprobarGanador();
+            let ganador = juego.comprobarGanador();
 
-            if (this.comprobarGanador() !== null) {
+            if (ganador !== null) {
               tools.showModal("Ganador", `Ganador: ${ganador}`);
               juego.isRunning = false;
             }
