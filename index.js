@@ -391,7 +391,7 @@ app.post('/signup', function (req, res) {
   `.trim();
 
   let username = req.body.username;
-  let passwd = req.body.pass;
+  let passwd = req.body.password;
   let exists = false;
 
   db.get(queryLogin, [username, passwd], function (err, row) {

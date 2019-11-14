@@ -329,7 +329,10 @@ class Juego {
 
     this.ws.onclose = function () {
       clearInterval(juego.intervalUpdate);
-      clearTimeout(this.ws.pingTimeout);
+      if(juego.ws){
+        clearTimeout(juego.ws.pingTimeout);
+      }
+      
       console.log("Conexión cerrada");
     }
 
