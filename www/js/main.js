@@ -5,35 +5,22 @@ class Main {
     this.contJuego = document.getElementById("contJuego");
     this.contJuegoLocal = document.getElementById("contJuegoLocal");
     this.contMainJuego = document.getElementById("contMainJuego");
-    this.tabla = document.getElementById("tablaUsuario")
 
     this.jugadorHash = null;
     this.sala = null;
   }
 
-  comprobacionUsuario() {
-    if (localStorage.getItem("jugadorHash") !== null) {
-      let dataSend = {
-        hash: localStorage.getItem("jugadorHash")
-      };
+  init(){
+    $("#juegoOnline-tab").on("shown.bs.tab", function(){
+      main.displayLogin();
+      juego.init(true);
+    });
 
-      tools.httpPost("/login", JSON.stringify(dataSend), function (msg) {
-        let resp = JSON.parse(msg);
+    $("#juego-tab").on("shown.bs.tab", function(){
+      juego.init(false);
+    });
 
-        if (resp.loginState) {
-          tools.showModal("Iniciar sesión", `Has iniciado sesión, bienvenido ${resp.username}`);
-
-          main.jugadorHash = resp.hash;
-
-          main.displayTabla();
-          main.listarSalas();3
-        }
-      }, function (err) {
-        console.error(err);
-      });
-    } else {
-      this.tabla.style.display = "none";
-    }
+    juego.init(false);
   }
 
   logIn() {
@@ -50,7 +37,6 @@ class Main {
 
         main.jugadorHash = resp.hash;
         sesionUsuario.guardarUsuario(main.jugadorHash);
-        main.displayTabla();
         main.listarSalas();
 
       } else {
@@ -220,14 +206,7 @@ class Main {
     this.contSalas.style.display = "block";
   }
 
-  displayTabla() {
-    this.tabla.style.display = "block"
-    usuarioTabla.innerHTML = localStorage.getItem("jugadorHash")
-    this.formLogIn.style.display = "none"
-  }
-
   displayLogin() {
-    this.tabla.style.display = "none"
-    this.formLogIn.style.display = "block"
+    $("#modalLogin").modal("show");
   }
 }
