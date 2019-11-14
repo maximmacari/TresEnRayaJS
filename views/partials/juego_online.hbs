@@ -40,7 +40,7 @@
   </div>
 </div>
 
-<div class="modal fade" role="dialog" id="modalLogin">
+<div class="modal fade" role="dialog" id="modalLogin" data-backdrop="static">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -60,7 +60,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-primary" onclick="main.logIn()">Entrar</button>
-        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#modalLogin">Cancelar</button>
+        <button onclick="$('#juego-tab').tab('show')" type="button" class="btn btn-danger" data-toggle="modal" data-target="#modalLogin">Cancelar</button>
       </div>
     </div>
   </div>
