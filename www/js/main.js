@@ -13,7 +13,6 @@ class Main {
   init(){
     $("#juegoOnline-tab").on("shown.bs.tab", function(){
       main.displayLogin();
-      juego.init(true);
     });
 
     $("#juego-tab").on("shown.bs.tab", function(){

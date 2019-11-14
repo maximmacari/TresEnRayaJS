@@ -1,3 +1,4 @@
+//Se exportan unos modulos que se usarán en el servidor
 const express = require('express');
 const hbs = require('express-handlebars');
 const app = express();
@@ -5,14 +6,16 @@ const bodyParser = require('body-parser');
 const WebSocket = require('ws');
 const sqlite3 = require('sqlite3').verbose();
 const tools = require('./tools.js');
-
+//Es el web socket server
 var wsServer = null;
 
 var salas = [];
 var clientes = [];
 var intervalPing = null;
 
+//Se estable un motor de templates que es el Handlebars
 app.set('view engine', 'hbs');
+//Se estable los directorios donde estaran las plantillas
 app.engine('hbs', hbs({
   extname: 'hbs',
   defaultView: 'index',
@@ -21,6 +24,7 @@ app.engine('hbs', hbs({
   partialsDir: __dirname + '/views/partials/'
 }));
 
+//En todos los use se configurará el middleware
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(express.static('./www'));
@@ -32,6 +36,7 @@ app.use((req, res, next) => {
   next();
 });
 
+//Se crea un objeto cliente que representará al usuario
 function Cliente(id, username, hash, maxScore) {
   this.ws = null;
   this.id = id;
@@ -41,6 +46,7 @@ function Cliente(id, username, hash, maxScore) {
   this.ping = new Date().getTime();
 }
 
+//Function que representará una sala donde dos jugadores podrán meterse para jugar online
 function Sala(nombreSala, claveSala, jugador) {
   this.nombre = nombreSala;
   this.clave = claveSala;
@@ -50,6 +56,7 @@ function Sala(nombreSala, claveSala, jugador) {
   this.turno = 0;
 }
 
+//Envia el tablero al cliente
 function enviarTablero(ws, nombreSala) {
   let dataSend = {
     type: "tablero",
@@ -67,6 +74,7 @@ function enviarTablero(ws, nombreSala) {
   ws.send(JSON.stringify(dataSend));
 }
 
+//Busca si el cliente que ha iniciado sesión ya existe y lo devuelve en pudiendo ser null o el cliente encontrado
 function searchCliente(hash) {
   let cliente = null;
   for (let clienteAux of clientes) {
@@ -78,6 +86,7 @@ function searchCliente(hash) {
   return cliente;
 }
 
+//Crea la tabla de usuarios en la base de datos si no existe
 function initUsersDb() {
   let db = new sqlite3.Database('./db/usuarios.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
     if (err) {
@@ -105,6 +114,7 @@ function initUsersDb() {
   });  
 }
 
+//Genera el tablero que verán los usuarios al jugar en online
 function generarTablero(sala) {
   let nCasillas = [3, 3];
 
@@ -129,6 +139,7 @@ function generarTablero(sala) {
   }
 }
 
+//Se comprueba las posibles jugadas ganadoras
 function comprobarGanador(tablero, jugadorID) {
   //tablero[0][0].value -> "cruz", "circulo", "none" [y, x]
   if (tablero[0][0].value == tablero[0][1] && tablero[0][1].value == tablero[0][2] && tablero[0][0].value != 0) return tablero[0][0];
@@ -143,6 +154,7 @@ function comprobarGanador(tablero, jugadorID) {
   if (tablero[2][0].value == tablero[1][1] && tablero[1][1].value == tablero[0][2] && tablero[2][0].value != 0) return tablero[2][0];
 }
 
+//Función que inicializará el web socket server
 function initWsServer() {
   wsServer = new WebSocket.Server({ port: 4741 });
 
@@ -246,6 +258,7 @@ function initWsServer() {
   });
 }
 
+//Cada tres segundos se comprueba si los clientes registrados están online
 intervalPing = setInterval(function ping() {
   for(let cliente of clientes){
     if(cliente.ws !== null){
@@ -263,14 +276,17 @@ intervalPing = setInterval(function ping() {
   }
 }, 3000);
 
+//Se define la ruta a la que se hará un get
 app.get('/', function (req, res) {
   res.render('index', { layout: 'main' });
 });
 
+//Se define metodo post, ruta y callback
 app.post('/getView', function (req, res) {
   res.sendFile(`./views/${req.body.pagina}`, { root: __dirname });
 });
 
+//Se define el metodo post y su ruta y el objeto que recibirá que será un usuario junto a un callback
 app.post('/login', function (req, res) {
   let dataSend = {
     username: "",
@@ -411,6 +427,7 @@ app.post('/signup', function (req, res) {
   });
 });
 
+//método post, ruta y callback que creará una sala
 app.post("/crearSala", function (req, res) {
   let dataSend = {
     type: "crearSala",
@@ -451,6 +468,7 @@ app.post("/crearSala", function (req, res) {
   res.send(JSON.stringify(dataSend));
 });
 
+//método post, ruta y callback que sirve para entrar a una sala recibiendo datos del usuario
 app.post("/entrarSala", function (req, res) {
   let dataSend = {
     type: "entrarSala",
@@ -504,6 +522,7 @@ app.get("/listSalas", function (req, res) {
 initUsersDb();
 initWsServer();
 
+//Se ejecuta el servidor para que los jugadores puedan entrar a la página
 app.listen(4740, function () {
   console.log('TresEnRaya, escuchando en el puerto 4740!');
 });
