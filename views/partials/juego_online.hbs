@@ -1,50 +1,6 @@
-<div class="container-fluid mt-2">
+<div class="container mt-2">
   <div class="row px-2">
-    <div class="col-md-2 p-2" id="espacioUsuario">
-      <div class="p-2 shadow h-100">
-        <form id="formLogin">
-          <h4 class="text-center">Iniciar sesión</h4>
-          <div class="form-group">
-            <label for="username">Usuario</label>
-            <input type="text" class="form-control" name="username" placeholder="Nombre de usuario">
-          </div>
-          <div class="form-group">
-            <label for="password">Introduce tu contraseña:</label>
-            <input type="password" class="form-control" name="password" placeholder="Contraseña">
-          </div>
-          <input type="button" value="Enviar" onclick="main.logIn()" class="btn btn-primary btn-block" />
-        </form>
-
-        <div id="tablaUsuario" style="display: none;">
-          <table class="table table-striped">
-            <thead>
-              <tr>
-                <th>Usuario</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td id="usuarioTabla"></td>
-              </tr>
-            </tbody>
-          </table>
-          <table class="table table-striped">
-            <thead>
-              <tr>
-                <th>Máxima Puntuación</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td id="puntuacionTabla"></td>
-              </tr>
-            </tbody>
-          </table>
-          <button class="btn btn-danger btn-block" onclick="main.cerrarSesion()">Cerrar sesión</button>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-8 p-2">
+    <div class="col-md-12 p-2">
       <div class="p-2 shadow h-100">
         <div id="contSalas">
           <div class="container-fluid bg-dark rounded p-2 mb-2">
@@ -81,13 +37,6 @@
           <table id="tablero">
           </table>
         </div>
-      </div>
-    </div>
-
-    <div class="col-md-2 p-2" id="usuariosList">
-      <div class="p-2 shadow h-100">
-        <h4 class="text-center">Jugadores online</h4>
-        <ul></ul>
       </div>
     </div>
   </div>
