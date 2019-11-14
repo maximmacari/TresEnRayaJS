@@ -28,6 +28,8 @@ class Main {
       password: this.formLogIn.elements.password.value
     };
 
+    $("#modalLogin").modal("hide");
+
     tools.httpPost("/login", JSON.stringify(dataSend), (msg) => {
       let resp = JSON.parse(msg);
 
@@ -39,11 +41,10 @@ class Main {
         main.listarSalas();
 
       } else {
-        tools.showModal("Iniciar sesión", "Usuario o contraseña incorrectos");
         if (confirm("¿Deseas registrarte con estos datos?")) {
-          signUp(usuario, password)
+          main.signUp(dataSend.username, dataSend.password);
         } else {
-
+          tools.showModal("Iniciar sesión", "Usuario o contraseña incorrectos");
         }
       }
     }, (err) => {
@@ -51,8 +52,27 @@ class Main {
     });
   }
 
-  signUp() {
+  signUp(usuario, password) {
+    let dataSend = {
+      username: usuario,
+      password: password
+    };
 
+    tools.httpPost("/signup", JSON.stringify(dataSend), (msg) => {
+      let resp = JSON.parse(msg);
+
+      if (resp.signUpState) {
+        tools.showModal("Registrar usuario", `Has creado una cuenta de usuario, ahora puedes iniciar sesión`);
+
+        main.jugadorHash = resp.hash;
+        sesionUsuario.guardarUsuario(main.jugadorHash);
+        main.listarSalas();
+      } else {
+        tools.showModal("Registrar usuario", "No se ha podido crear el usuario, cuenta ya existente");
+      }
+    }, (err) => {
+      console.error(err);
+    });
   }
 
   cerrarSesion() {
@@ -93,7 +113,7 @@ class Main {
           if(resp.result){
             main.sala = nombreSala;
   
-            juego.init();
+            juego.init(true);
   
             tools.showModal("Entrar en sala", resp.msg);
           }else{
